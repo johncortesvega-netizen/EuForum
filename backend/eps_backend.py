@@ -1,6 +1,6 @@
 """European Public Square backend MVP.
 
-Patch 22 keeps the backend prototype EU-hard-boundary-aware and frontend-connectable while the project gains a first invited alpha session kit. Direct-harm categories are mapped to human moderation routes, while Sydney Protocol handles THRESHOLD clarification only. The identity posture remains deliberately narrow:
+Public demo ready v1.0 keeps the backend prototype EU-hard-boundary-aware and frontend-connectable while the project is positioned for open demo testing. Direct-harm categories are mapped to human moderation routes, while Sydney Protocol handles THRESHOLD clarification only. The identity posture remains deliberately narrow:
 accounts provide display name + country for accountable posting, but the backend
 stores conversation records, not hidden profiles, ad profiles, ranking models, or
 behavioral personalization.
@@ -22,7 +22,7 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-APP_VERSION = "0.18-patch-22-first-invited-alpha-session-kit"
+APP_VERSION = "1.0-public-demo-ready"
 BOUNDARY = "The backend stores conversation records, not hidden profiles."
 LOGIN_BOUNDARY = "Minimal login supports accountable posting: display name + country, no hidden profile."
 HUMAN_REVIEW_BOUNDARY = "Reports trigger review. Human moderators decide visibility. Serious actions require two-moderator review."

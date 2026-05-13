@@ -1,14 +1,14 @@
-# European Public Square v0.18
+# European Public Square v1.0
 
-A public prototype for a future free, slower multilingual forum for Europe.
+A public demo ready build for a future free, slower multilingual forum for Europe.
 
-European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only. This repository is the public prototype/demo build, not a finished production platform.
+European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, a read-only European media feed, and Sydney Protocol prompts that clarify only. This repository is the public demo ready build, not a finished production platform.
 
 For a feature-by-feature explanation of what is implemented and how, see `docs/ABOUT.md`.
 
-## Current prototype status
+## Current public demo status
 
-Patch 22 adds the first invited alpha session kit. This is not a public launch, not a payment system, and not automatic filtering.
+This build is ready to show and test publicly as a demo. It is not a production launch, not a payment system, not an identity-verification system, and not automatic filtering.
 
 The prototype currently includes:
 
@@ -32,7 +32,7 @@ The prototype currently includes:
 - public prototype setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, feedback form, and launch checklist;
 - dependency-free public prototype smoke check and test runbook;
 - onboarding, what-to-test checklist, issue log, moderator shift sheet, session report, and go/no-go decision docs;
-- public concept, public-good, donation transparency, open-source/stewardship, and private-alpha roadmap documents;
+- public concept, public-good, donation transparency, open-source/stewardship, and readiness roadmap documents;
 - EU hard-boundary map for direct-harm categories;
 - Sydney Protocol THRESHOLD layer for clarification only.
 
@@ -61,7 +61,7 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-## Public prototype smoke check
+## Public demo smoke check
 
 Run the dependency-free smoke gate before demo sessions:
 
@@ -102,7 +102,7 @@ See:
 
 ## Not included yet
 
-- No real public launch.
+- No production public launch.
 - No real donations or payment processing.
 - No donor account model.
 - No production appeal case-management workflow.
@@ -150,7 +150,7 @@ Boundary: donations buy no influence. Appeals are human-reviewable and receipted
 
 Adds the private alpha readiness pack: setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, alpha feedback form, and private alpha launch checklist.
 
-Boundary: this made the prototype ready for structured testing. It was later opened as a public prototype/demo build.
+Boundary: this made the prototype ready for structured testing. It was later opened as a public demo ready build.
 
 
 ## Patch 21
@@ -162,6 +162,13 @@ Boundary: passing smoke means ready for a demo/test session only. It is still no
 
 ## Patch 22
 
-Adds the first invited alpha session kit: invite text, tester onboarding, what-to-test checklist, issue log template, moderator shift sheet, session report, and go/no-go decision doc.
+Adds the structured test-session kit: invite text, tester onboarding, what-to-test checklist, issue log template, moderator shift sheet, session report, and go/no-go decision doc.
 
 Boundary: this prepares structured testing. The current repo is now positioned as a public prototype/demo, not a finished production platform.
+
+
+## Public Demo Ready v1.0
+
+Positions the repository as a public demo ready build with the forum, About map, moderation surfaces, transparency pages, and read-only European media RSS feed available through the Streamlit app.
+
+Boundary: public demo ready means open for testing and explanation. It is still not a finished production platform.

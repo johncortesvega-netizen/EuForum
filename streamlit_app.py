@@ -119,7 +119,7 @@ st.set_page_config(
     layout="wide",
 )
 
-st.caption("European Public Square v0.18 - public prototype / demo build")
+st.caption("European Public Square v1.0 - public demo ready build")
 
 forum_tab, media_tab = st.tabs(["Forum", "Media Feed"])
 

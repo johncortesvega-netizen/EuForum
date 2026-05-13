@@ -1,10 +1,10 @@
 # About European Public Square
 
-European Public Square is currently a public prototype for a future free, slower multilingual forum for Europe.
+European Public Square is currently a public demo ready build for a future free, slower multilingual forum for Europe.
 
 It is built to test a public-square model: structured rooms and threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.
 
-This is an open demo/testing build. It is public to try, but it is not a finished production platform.
+This is an open demo/testing build. It is public to try, explain, and collect feedback on, but it is not a finished production platform.
 
 ## Feature Implementation Map
 

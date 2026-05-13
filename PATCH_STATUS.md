@@ -1,10 +1,10 @@
 # Patch Status
 
-Current prototype: European Public Square v0.18
+Current prototype: European Public Square v1.0
 
-Latest patch: PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT
+Latest patch: PUBLIC_DEMO_READY_V1
 
-Status: local functional prototype, working locally.
+Status: public demo ready build, working locally and prepared for Streamlit deployment.
 
 Implemented:
 

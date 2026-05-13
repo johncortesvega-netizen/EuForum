@@ -55,7 +55,7 @@ const requiredFiles = [
 
 for (const file of requiredFiles) expectFile(file);
 
-expectIncludes("index.html", "European Public Square v0.18");
+expectIncludes("index.html", "European Public Square v1.0");
 expectIncludes("index.html", "mediaFeedBtn");
 expectIncludes("index.html", "aboutBtn");
 expectIncludes("index.html", "alphaReadinessBtn");
@@ -71,14 +71,14 @@ expectIncludes("data/receiptSystem.js", "createAppealReceipt");
 expectIncludes("data/receiptSystem.js", "createSpendingReceipt");
 expectIncludes("docs/PRIVATE_ALPHA_TEST_RUNBOOK.md", "Smoke Test");
 expectIncludes("docs/PRIVATE_ALPHA_INVITE_TEXT.md", "controlled invited test");
-expectIncludes("README.md", "public prototype/demo build");
-expectIncludes("streamlit_app.py", "public prototype / demo build");
+expectIncludes("README.md", "public demo ready build");
+expectIncludes("streamlit_app.py", "public demo ready build");
 expectIncludes("docs/PRIVATE_ALPHA_WHAT_TO_TEST.md", "Decision");
 expectIncludes("docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md", "Go / No-Go");
 expectIncludes("docs/ABOUT.md", "Feature Implementation Map");
 expectIncludes("docs/ABOUT.md", "How it is implemented in this prototype");
 expectIncludes("docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "No automated moderation claims");
-expectIncludes("PATCH_STATUS.md", "PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT");
+expectIncludes("PATCH_STATUS.md", "PUBLIC_DEMO_READY_V1");
 expectIncludes("README.md", "npm run smoke");
 expectIncludes("streamlit_app.py", "components.html");
 expectIncludes("streamlit_app.py", "inline_static_assets");

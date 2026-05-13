@@ -1703,6 +1703,65 @@ searchInput.addEventListener("input", (event) => renderForums(event.target.value
 
 document.getElementById("homeBtn").addEventListener("click", () => renderForums(searchInput.value));
 
+document.getElementById("aboutBtn")?.addEventListener("click", () => {
+  showDialog("About European Public Square", `
+    <p><strong>European Public Square</strong> is a free, slower multilingual forum prototype for Europe. It tests a public-square model built around rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
+    <p><strong>Current stage:</strong> private alpha candidate. Controlled invited testing only; still not public launch.</p>
+    <div class="feature-map">
+      <article>
+        <strong>Forum structure</strong>
+        <p>Rooms, threads, replies, latest activity, and recent-thread lists are rendered from <code>data/localData.js</code> by <code>app.js</code>. There is no algorithmic feed.</p>
+      </article>
+      <article>
+        <strong>Posting and limits</strong>
+        <p>The composer creates local demo threads/replies in page memory. A 3-posts-per-30-minutes demo window and 45-second cooldown are tracked in <code>app.js</code>.</p>
+      </article>
+      <article>
+        <strong>Accountability</strong>
+        <p>Posts show display name + country; photo is optional. Backend login can supply those fields via FastAPI when running. Tokens stay in page memory.</p>
+      </article>
+      <article>
+        <strong>Translation layer</strong>
+        <p>Original and reader-language text render side by side. Translation receipts explain that translation is a bridge, not a replacement. No real translation provider is connected.</p>
+      </article>
+      <article>
+        <strong>Sydney Protocol prompts</strong>
+        <p><code>data/protocolRules.js</code> performs local clarify-only prompt analysis. Prompts surface context questions; they do not judge, rank, punish, hide, or enforce.</p>
+      </article>
+      <article>
+        <strong>Receipts ledger</strong>
+        <p><code>data/receiptSystem.js</code> creates visible receipts for posts, identity, translation, protocol prompts, reports, moderation, evidence notes, spending, and appeals.</p>
+      </article>
+      <article>
+        <strong>Human review</strong>
+        <p>Reports route to human review. The UI supports temporary hide and two-moderator panel review. Backend endpoints exist for reports, review queue, and review actions.</p>
+      </article>
+      <article>
+        <strong>Evidence notes</strong>
+        <p>Evidence reviewers add source/context notes through <code>data/evidenceReview.js</code>. They do not decide truth, guilt, corruption, or legitimacy.</p>
+      </article>
+      <article>
+        <strong>Appeals</strong>
+        <p>Appeal buttons appear for appealable visibility actions. The local flow tracks submitted, under-review, and resolved states, with appeal receipts.</p>
+      </article>
+      <article>
+        <strong>Donation transparency</strong>
+        <p><code>data/donationTransparency.js</code> provides mock monthly costs and spending receipts. No payment processor is connected. Donations buy no influence.</p>
+      </article>
+      <article>
+        <strong>Private alpha pack</strong>
+        <p>The <code>docs/PRIVATE_ALPHA_*</code> files cover setup, runbook, invite, onboarding, test checklist, issue log, moderator shifts, session report, and go/no-go decision.</p>
+      </article>
+      <article>
+        <strong>Smoke test</strong>
+        <p><code>tests/private_alpha_smoke_check.mjs</code> verifies the alpha shell, docs, core UI markers, receipt functions, and no forbidden browser persistence APIs.</p>
+      </article>
+    </div>
+    <p><strong>Not implemented:</strong> public launch, public registration, real translation, real donations/payments, production auth, production moderation case management, automated moderation, ranking, or hidden behavioral profiles.</p>
+    <p><small>Full implementation map: <code>docs/ABOUT.md</code>.</small></p>
+  `);
+});
+
 document.getElementById("languageBtn").addEventListener("click", () => {
   showDialog("Language concept", `
     <p>People write in their native language. Readers see their preferred language, with the original always available.</p>

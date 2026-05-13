@@ -4,6 +4,8 @@ A free, slower multilingual forum prototype for Europe.
 
 European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only.
 
+For a feature-by-feature explanation of what is implemented and how, see `docs/ABOUT.md`.
+
 ## Current prototype status
 
 Patch 22 adds the first invited alpha session kit. This is not a public launch, not a payment system, and not automatic filtering.
@@ -11,6 +13,7 @@ Patch 22 adds the first invited alpha session kit. This is not a public launch, 
 The prototype currently includes:
 
 - static frontend forum shell;
+- About dialog and feature implementation map;
 - local data model for rooms, threads, and posts;
 - local browser-memory draft threads and replies;
 - posting cooldown and session limit behavior;
@@ -87,6 +90,7 @@ API docs: `http://127.0.0.1:8000/docs`
 See:
 
 - `docs/PUBLIC_CONCEPT.md`
+- `docs/ABOUT.md`
 - `docs/PUBLIC_GOOD_PROMISE.md`
 - `docs/DONATION_TRANSPARENCY_MODEL.md`
 - `docs/OPEN_SOURCE_AND_STEWARDSHIP.md`

@@ -44,6 +44,7 @@ const requiredFiles = [
   "docs/PRIVATE_ALPHA_MODERATOR_SHIFT_SHEET.md",
   "docs/PRIVATE_ALPHA_SESSION_REPORT.md",
   "docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md",
+  "docs/ABOUT.md",
   "PATCH_STATUS.md",
   "README.md",
 ];
@@ -51,7 +52,10 @@ const requiredFiles = [
 for (const file of requiredFiles) expectFile(file);
 
 expectIncludes("index.html", "European Public Square v0.18");
+expectIncludes("index.html", "aboutBtn");
 expectIncludes("index.html", "alphaReadinessBtn");
+expectIncludes("app.js", "About European Public Square");
+expectIncludes("app.js", "feature-map");
 expectIncludes("app.js", "renderPrivateAlphaReadinessPack");
 expectIncludes("app.js", "renderDonationTransparencyPage");
 expectIncludes("app.js", "showAppealFlow");
@@ -62,6 +66,8 @@ expectIncludes("docs/PRIVATE_ALPHA_TEST_RUNBOOK.md", "Smoke Test");
 expectIncludes("docs/PRIVATE_ALPHA_INVITE_TEXT.md", "controlled invited test");
 expectIncludes("docs/PRIVATE_ALPHA_WHAT_TO_TEST.md", "Decision");
 expectIncludes("docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md", "Go / No-Go");
+expectIncludes("docs/ABOUT.md", "Feature Implementation Map");
+expectIncludes("docs/ABOUT.md", "How it is implemented in this prototype");
 expectIncludes("docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "No automated moderation claims");
 expectIncludes("PATCH_STATUS.md", "PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT");
 expectIncludes("README.md", "npm run smoke");

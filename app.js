@@ -337,6 +337,46 @@ function boundaryMap() {
   return window.EPS_EU_HARD_BOUNDARY_MAP || null;
 }
 
+function mediaFeedSources() {
+  return [
+    {
+      name: "BBC News Europe",
+      country: "United Kingdom",
+      language: "English",
+      feedUrl: "http://feeds.bbci.co.uk/news/world/europe/rss.xml",
+      siteUrl: "https://www.bbc.com/news/world/europe",
+    },
+    {
+      name: "France 24 Europe",
+      country: "France",
+      language: "English",
+      feedUrl: "https://www.france24.com/en/europe/rss",
+      siteUrl: "https://www.france24.com/en/europe/",
+    },
+    {
+      name: "Deutsche Welle Europe",
+      country: "Germany",
+      language: "English",
+      feedUrl: "https://rss.dw.com/rdf/rss-en-eu",
+      siteUrl: "https://www.dw.com/en/europe/s-1433",
+    },
+    {
+      name: "The Guardian Europe",
+      country: "United Kingdom",
+      language: "English",
+      feedUrl: "https://www.theguardian.com/world/europe-news/rss",
+      siteUrl: "https://www.theguardian.com/world/europe-news",
+    },
+    {
+      name: "POLITICO Europe",
+      country: "Belgium / EU",
+      language: "English",
+      feedUrl: "https://www.politico.eu/feed/rss/",
+      siteUrl: "https://www.politico.eu/",
+    },
+  ];
+}
+
 function createReviewState(postId) {
   const pipeline = reviewPipeline();
   const base = pipeline && typeof pipeline.createReviewState === "function"
@@ -1608,6 +1648,50 @@ function renderPrivateAlphaReadinessPack() {
   forumArea.querySelector("[data-home]")?.addEventListener("click", () => renderForums(searchInput.value));
 }
 
+function renderMediaFeedTab() {
+  state.currentForumId = null;
+  state.currentThreadId = null;
+  const sources = mediaFeedSources();
+  forumArea.innerHTML = `
+    <article class="category">
+      <header class="category-head category-head-row">
+        <div>
+          <button class="back-link" type="button" data-home>Back to square</button>
+          <h2>European media feed</h2>
+          <p>Read-only media outlet feed. No replies here; open the original outlet for the publisher's own process.</p>
+        </div>
+      </header>
+      <section class="media-feed-tab">
+        <div class="identity-notice">
+          <strong>Read-only by design</strong>
+          <p>This tab lists European media RSS sources and links out. It does not create forum replies, quote posts, likes, comments, or discussion threads for news items.</p>
+        </div>
+        <div class="media-source-grid">
+          ${sources.map((source) => `
+            <article class="media-source-card">
+              <strong>${escapeHtml(source.name)}</strong>
+              <p>${escapeHtml(source.country)} • ${escapeHtml(source.language)}</p>
+              <div class="media-actions">
+                <a class="ghost-link" href="${escapeHtml(source.siteUrl)}" target="_blank" rel="noopener noreferrer">Open outlet</a>
+                <a class="ghost-link" href="${escapeHtml(source.feedUrl)}" target="_blank" rel="noopener noreferrer">Open RSS</a>
+              </div>
+            </article>
+          `).join("")}
+        </div>
+        <div class="clarity-checklist">
+          <strong>How live headlines work</strong>
+          <ul>
+            <li>The Streamlit version loads RSS server-side and refreshes cached items every 10 minutes.</li>
+            <li>The static forum tab lists the same sources and links out, because browsers often block direct RSS fetching through CORS.</li>
+            <li>To read, share, subscribe, comment, or follow a publisher process, use the original outlet link.</li>
+          </ul>
+        </div>
+      </section>
+    </article>
+  `;
+  forumArea.querySelector("[data-home]")?.addEventListener("click", () => renderForums(searchInput.value));
+}
+
 function renderBackendQueueRow(item) {
   return `
     <article class="review-queue-row">
@@ -1702,6 +1786,10 @@ function renderRecentThreads() {
 searchInput.addEventListener("input", (event) => renderForums(event.target.value));
 
 document.getElementById("homeBtn").addEventListener("click", () => renderForums(searchInput.value));
+
+document.getElementById("mediaFeedBtn")?.addEventListener("click", () => {
+  renderMediaFeedTab();
+});
 
 document.getElementById("aboutBtn")?.addEventListener("click", () => {
   showDialog("About European Public Square", `

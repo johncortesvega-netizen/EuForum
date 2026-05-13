@@ -56,12 +56,15 @@ const requiredFiles = [
 for (const file of requiredFiles) expectFile(file);
 
 expectIncludes("index.html", "European Public Square v0.18");
+expectIncludes("index.html", "mediaFeedBtn");
 expectIncludes("index.html", "aboutBtn");
 expectIncludes("index.html", "alphaReadinessBtn");
 expectIncludes("app.js", "About European Public Square");
 expectIncludes("app.js", "feature-map");
 expectIncludes("app.js", "renderPrivateAlphaReadinessPack");
 expectIncludes("app.js", "renderDonationTransparencyPage");
+expectIncludes("app.js", "renderMediaFeedTab");
+expectIncludes("app.js", "mediaFeedSources");
 expectIncludes("app.js", "showAppealFlow");
 expectIncludes("app.js", "Patch 22 phrase");
 expectIncludes("data/receiptSystem.js", "createAppealReceipt");
@@ -85,6 +88,7 @@ expectIncludes("streamlit_app.py", "Open original");
 expectIncludes("requirements.txt", "streamlit");
 expectIncludes("requirements.txt", "feedparser");
 expectIncludes("docs/EUROPEAN_MEDIA_FEED.md", "There are no replies");
+expectIncludes("docs/EUROPEAN_MEDIA_FEED.md", "forum tab");
 expectIncludes("data/europeanMediaFeeds.json", "BBC News Europe");
 
 for (const forbidden of ["localStorage", "sessionStorage", "XMLHttpRequest", "indexedDB", "navigator.sendBeacon"]) {

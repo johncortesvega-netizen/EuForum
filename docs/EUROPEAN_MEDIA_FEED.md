@@ -1,6 +1,6 @@
 # European Media Feed
 
-The public prototype includes a read-only European media feed in the Streamlit app.
+The public prototype includes a read-only European media feed as a forum tab and as a live Streamlit RSS panel.
 
 ## Purpose
 
@@ -12,6 +12,8 @@ Show recent headlines from European media outlets and newspapers without turning
 - Streamlit loads RSS feeds server-side with `feedparser`.
 - Results are cached for 10 minutes with `st.cache_data(ttl=600)`.
 - A `Refresh RSS now` button clears the cache and reloads feeds.
+- The static forum UI has a `Media Feed` tab that lists the same outlets and links to their sites/RSS feeds.
+- The static tab does not fetch live RSS directly because browsers commonly block cross-origin RSS requests.
 - Each item shows:
   - title;
   - source;

@@ -1,0 +1,24 @@
+PATCH_05_RECEIPTS_SYSTEM
+
+Changed files:
+- index.html
+- app.js
+- styles.css
+- data/receiptSystem.js
+- docs/PATCH_05_RECEIPTS_SYSTEM.md
+- PATCH_STATUS.md
+- PATCH_05_MANIFEST.txt
+- PATCH_05_RECOVERY_NOTE.md
+- tests/test_patch_05_receipts_system.py
+
+Purpose:
+- Add a visible local receipt system for posts, protocol prompts, translation visibility, moderation placeholders, and donation placeholders.
+
+Boundaries:
+- No backend.
+- No login.
+- No persistent storage.
+- No real donations/payments.
+- No moderation enforcement.
+- No real translation.
+- Receipts do not judge, rank, punish, censor, decide truth, or create hidden user profiles.

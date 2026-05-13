@@ -1,0 +1,32 @@
+PATCH 09 — PUBLIC LAUNCH CONCEPT PACK
+
+Changed/added files:
+- README.md
+- PATCH_STATUS.md
+- index.html
+- app.js
+- docs/PUBLIC_CONCEPT.md
+- docs/PUBLIC_GOOD_PROMISE.md
+- docs/DONATION_TRANSPARENCY_MODEL.md
+- docs/OPEN_SOURCE_AND_STEWARDSHIP.md
+- docs/WHAT_THIS_IS_NOT.md
+- docs/ROADMAP_TO_PRIVATE_ALPHA.md
+- docs/PATCH_09_PUBLIC_LAUNCH_CONCEPT_PACK.md
+- docs/ROADMAP.md
+- docs/ROADMAP_TO_LIVE.md
+- tests/test_patch_09_public_launch_concept_pack.py
+
+Purpose:
+- Make the prototype concept public-facing without launching it.
+- Clarify free/public-good posture.
+- Clarify donation transparency and no donor influence.
+- Clarify open-source and stewardship direction.
+- Clarify what the project is not.
+
+Not included:
+- No public launch.
+- No real donations or payment processing.
+- No moderation enforcement.
+- No real translation.
+- No frontend/backend connection.
+- No EU identity integration.

@@ -1,0 +1,23 @@
+European Public Square — Patch 06 Manifest
+
+Patch: 06
+Name: Accountable Identity Display
+
+Updated files:
+- app.js
+- styles.css
+- data/localData.js
+- data/receiptSystem.js
+- docs/PRIVACY_PROMISE.md
+- docs/ROADMAP_TO_LIVE.md
+- PATCH_STATUS.md
+
+Added files:
+- docs/ACCOUNTABLE_IDENTITY_MODEL.md
+- docs/PATCH_06_ACCOUNTABLE_IDENTITY.md
+- tests/test_patch_06_accountable_identity.py
+- PATCH_06_MANIFEST.txt
+- PATCH_06_RECOVERY_NOTE.md
+
+Intent:
+Posts now model the locked accountable identity posture: name and country visible on posts, photo optional, no hidden second profile. This is still a local browser-memory prototype without backend, login, persistence, or verification.

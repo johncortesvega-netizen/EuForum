@@ -1,0 +1,34 @@
+European Public Square — Patch 02 Manifest
+
+Patch: PATCH_02_LOCAL_DATA_MODEL
+Base: EuropeanPublicSquare_v0.2 raw shell + Patch 01 concept lock direction
+Output: EuropeanPublicSquare_v0.3_full.zip
+
+Changed / added files:
+- index.html
+- app.js
+- styles.css
+- README.md
+- data/localData.js
+- data/forums.json
+- docs/PATCH_02_LOCAL_DATA_MODEL.md
+- PATCH_STATUS.md
+- PATCH_02_MANIFEST.txt
+- PATCH_02_RECOVERY_NOTE.md
+- tests/test_patch_02_static_checks.py
+
+Intent:
+- Move forum data into local data source.
+- Render forums/threads/posts from local data.
+- Allow new threads and replies in browser/page memory only.
+- Keep no backend/no storage/no tracking boundary.
+- Keep Sydney Protocol clarify-only behavior.
+
+Not included:
+- no backend
+- no login
+- no persistent storage
+- no real translation
+- no moderation enforcement
+- no identity integration
+- no donation/payment layer

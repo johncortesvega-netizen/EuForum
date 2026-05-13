@@ -1,0 +1,29 @@
+PATCH 03 — Composer + Posting Limits
+
+Changed files:
+- app.js
+- styles.css
+- README.md
+- PATCH_STATUS.md
+
+Added files:
+- docs/PATCH_03_COMPOSER_POSTING_LIMITS.md
+- tests/test_patch_03_composer_posting_limits.py
+- PATCH_03_MANIFEST.txt
+- PATCH_03_RECOVERY_NOTE.md
+
+Purpose:
+- Make slow-posting behavior clearer and more functional in the local raw-shell prototype.
+- Add visible pause step before local posts.
+- Add demo cooldown after posts.
+- Add live composer/posting-status updates.
+- Preserve the no-backend, no-storage, no-tracking boundary.
+
+Not included:
+- No backend.
+- No persistent storage.
+- No login.
+- No real translation.
+- No moderation enforcement.
+- No payment/donation system.
+- No identity integration.

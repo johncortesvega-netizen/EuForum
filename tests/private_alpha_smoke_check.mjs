@@ -1,0 +1,79 @@
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+
+const root = process.cwd();
+const failures = [];
+
+function read(path) {
+  return readFileSync(join(root, path), "utf8");
+}
+
+function expectFile(path) {
+  if (!existsSync(join(root, path))) failures.push(`Missing file: ${path}`);
+}
+
+function expectIncludes(path, text) {
+  const body = read(path);
+  if (!body.includes(text)) failures.push(`${path} does not include: ${text}`);
+}
+
+function expectNotIncludes(path, text) {
+  const body = read(path);
+  if (body.includes(text)) failures.push(`${path} unexpectedly includes: ${text}`);
+}
+
+const requiredFiles = [
+  "index.html",
+  "app.js",
+  "styles.css",
+  "data/receiptSystem.js",
+  "data/donationTransparency.js",
+  "docs/PRIVATE_ALPHA_SETUP_GUIDE.md",
+  "docs/PRIVATE_ALPHA_ADMIN_CHECKLIST.md",
+  "docs/PRIVATE_ALPHA_MODERATOR_GUIDE.md",
+  "docs/PRIVATE_ALPHA_EVIDENCE_REVIEWER_GUIDE.md",
+  "docs/PRIVATE_ALPHA_PRIVACY_AND_RULES.md",
+  "docs/PRIVATE_ALPHA_KNOWN_LIMITATIONS.md",
+  "docs/PRIVATE_ALPHA_FEEDBACK_FORM.md",
+  "docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md",
+  "docs/PRIVATE_ALPHA_TEST_RUNBOOK.md",
+  "docs/PRIVATE_ALPHA_INVITE_TEXT.md",
+  "docs/PRIVATE_ALPHA_TESTER_ONBOARDING.md",
+  "docs/PRIVATE_ALPHA_WHAT_TO_TEST.md",
+  "docs/PRIVATE_ALPHA_ISSUE_LOG_TEMPLATE.md",
+  "docs/PRIVATE_ALPHA_MODERATOR_SHIFT_SHEET.md",
+  "docs/PRIVATE_ALPHA_SESSION_REPORT.md",
+  "docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md",
+  "PATCH_STATUS.md",
+  "README.md",
+];
+
+for (const file of requiredFiles) expectFile(file);
+
+expectIncludes("index.html", "European Public Square v0.18");
+expectIncludes("index.html", "alphaReadinessBtn");
+expectIncludes("app.js", "renderPrivateAlphaReadinessPack");
+expectIncludes("app.js", "renderDonationTransparencyPage");
+expectIncludes("app.js", "showAppealFlow");
+expectIncludes("app.js", "Patch 22 phrase");
+expectIncludes("data/receiptSystem.js", "createAppealReceipt");
+expectIncludes("data/receiptSystem.js", "createSpendingReceipt");
+expectIncludes("docs/PRIVATE_ALPHA_TEST_RUNBOOK.md", "Smoke Test");
+expectIncludes("docs/PRIVATE_ALPHA_INVITE_TEXT.md", "controlled invited test");
+expectIncludes("docs/PRIVATE_ALPHA_WHAT_TO_TEST.md", "Decision");
+expectIncludes("docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md", "Go / No-Go");
+expectIncludes("docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "No automated moderation claims");
+expectIncludes("PATCH_STATUS.md", "PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT");
+expectIncludes("README.md", "npm run smoke");
+
+for (const forbidden of ["localStorage", "sessionStorage", "XMLHttpRequest", "indexedDB", "navigator.sendBeacon"]) {
+  expectNotIncludes("app.js", forbidden);
+}
+
+if (failures.length) {
+  console.error("Private alpha smoke check failed:");
+  for (const failure of failures) console.error(`- ${failure}`);
+  process.exit(1);
+}
+
+console.log("Private alpha smoke check passed.");

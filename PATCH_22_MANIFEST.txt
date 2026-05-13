@@ -1,0 +1,36 @@
+PATCH 22 - FIRST INVITED ALPHA SESSION KIT
+
+Status: built
+
+Files changed:
+- index.html
+- app.js
+- README.md
+- PATCH_STATUS.md
+- backend/eps_backend.py
+- tests/private_alpha_smoke_check.mjs
+- docs/PRIVATE_ALPHA_INVITE_TEXT.md
+- docs/PRIVATE_ALPHA_TESTER_ONBOARDING.md
+- docs/PRIVATE_ALPHA_WHAT_TO_TEST.md
+- docs/PRIVATE_ALPHA_ISSUE_LOG_TEMPLATE.md
+- docs/PRIVATE_ALPHA_MODERATOR_SHIFT_SHEET.md
+- docs/PRIVATE_ALPHA_SESSION_REPORT.md
+- docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md
+
+Adds:
+- tester invite text;
+- tester onboarding page;
+- what-to-test checklist;
+- issue log template;
+- moderator shift sheet;
+- alpha session report template;
+- go/no-go decision doc;
+- Alpha Pack UI references;
+- smoke gate coverage for the session kit.
+
+Boundary:
+- first invited alpha session only;
+- still not public launch;
+- no public registration;
+- no real donations/payments;
+- no automated moderation.

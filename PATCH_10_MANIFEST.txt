@@ -1,0 +1,30 @@
+European Public Square — Patch 10 Manifest
+
+Patch: 10
+Name: Human Review Pipeline
+
+Changed files:
+- index.html
+- app.js
+- styles.css
+- data/reviewPipeline.js
+- data/receiptSystem.js
+- backend/eps_backend.py
+- docs/PATCH_10_HUMAN_REVIEW_PIPELINE.md
+- docs/ROADMAP.md
+- PATCH_STATUS.md
+- PATCH_10_MANIFEST.txt
+- PATCH_10_RECOVERY_NOTE.md
+- tests/test_patch_10_human_review_pipeline.py
+
+Purpose:
+Add a bounded human-review pipeline: user reports trigger review; human moderators decide visibility; serious visibility actions require two additional human moderators; every step creates receipts.
+
+Boundaries preserved:
+- Sydney Protocol clarifies only.
+- Reports do not decide.
+- Protocol prompts do not hide posts.
+- Human review is accountable with name + country.
+- Serious actions are reviewable and receipted.
+- No backend/frontend connection required for the raw shell.
+- No real moderation enforcement beyond local prototype simulation.

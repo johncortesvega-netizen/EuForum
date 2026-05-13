@@ -1,0 +1,23 @@
+European Public Square — Patch 11 Manifest
+Patch: EU Hard-Boundary Map + Sydney Protocol THRESHOLD Layer
+
+Changed/added files:
+- index.html
+- app.js
+- backend/eps_backend.py
+- data/euHardBoundaryMap.js
+- data/reviewPipeline.js
+- data/receiptSystem.js
+- docs/EU_HARD_BOUNDARY_MAP.md
+- docs/PATCH_11_EU_HARD_BOUNDARY_MAP.md
+- docs/ROADMAP.md
+- docs/ROADMAP_TO_LIVE.md
+- README.md
+- PATCH_STATUS.md
+- PATCH_11_RECOVERY_NOTE.md
+- tests/test_patch_11_eu_hard_boundary_map.py
+
+Boundary:
+- EU hard-boundary floor handles direct-harm categories via accountable human moderation.
+- Sydney Protocol handles THRESHOLD pressure by clarification only.
+- No automatic filtering, no automated moderation, no truth verdict, no enforcement.

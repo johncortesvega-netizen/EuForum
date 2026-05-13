@@ -1,0 +1,27 @@
+PATCH 04 — CLARIFY-ONLY PROTOCOL PROMPTS
+
+Changed/added files:
+- index.html
+- app.js
+- styles.css
+- README.md
+- PATCH_STATUS.md
+- PATCH_04_MANIFEST.txt
+- PATCH_04_RECOVERY_NOTE.md
+- data/protocolRules.js
+- docs/PATCH_04_CLARIFY_ONLY_PROTOCOL_PROMPTS.md
+- tests/test_patch_04_protocol_prompts.py
+
+Purpose:
+Add a local Sydney Protocol clarify-only prompt layer with structured prompt categories, richer receipt previews, matched-term traces, and boundary notes.
+
+Explicit non-goals:
+- No backend.
+- No login.
+- No persistent storage.
+- No tracking.
+- No hidden profile.
+- No real translation.
+- No moderation enforcement.
+- No payment/donation system.
+- No identity integration.

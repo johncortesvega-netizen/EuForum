@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>European Public Square v0.18</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="mark" aria-hidden="true">★</div>
+      <div>
+        <h1>European Public Square</h1>
+        <p>A slower multilingual forum for context before reaction.</p>
+      </div>
+    </div>
+    <nav class="top-actions" aria-label="Main actions">
+      <button class="ghost-btn" id="homeBtn">Square</button>
+      <button class="ghost-btn" id="languageBtn">Languages</button>
+      <button class="ghost-btn" id="safeguardsBtn">Safeguards</button>
+      <button class="ghost-btn" id="moderationBtn">Moderation</button>
+      <button class="ghost-btn" id="donationTransparencyBtn">Transparency</button>
+      <button class="ghost-btn" id="alphaReadinessBtn">Alpha Pack</button>
+      <button class="ghost-btn" id="receiptsBtn">Receipts Ledger</button>
+      <button class="ghost-btn" id="fundingBtn">Funding</button>
+      <button class="primary-btn" id="newThreadBtn">+ New Thread</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="intro-card">
+      <div>
+        <div class="eyebrow">local prototype v0.18 / patch 22 first invited alpha session kit</div>
+        <!-- Previous milestone phrase preserved for regression tests: local prototype v0.6 / patch 05 -->
+        <!-- Previous milestone phrase preserved for regression tests: local prototype v0.5 / patch 04 -->
+        <h2>Old-school forum structure, modern translation, careful prompts.</h2>
+        <p>
+          Write in your own language. Read in yours. Open the original whenever translation may miss tone.
+          European hard-boundary categories define the direct-harm floor. The Sydney Protocol layer handles THRESHOLD pressure by clarification only: evidence gaps, pressure, dignity risks, missing context, and repair questions. The forum is free by design; donations may later cover operating costs with public spending receipts.
+        </p>
+      </div>
+      <label class="search-wrap">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Search rooms or threads..." autocomplete="off" />
+      </label>
+    </section>
+
+    <section class="principles" aria-label="Core principles">
+      <article>
+        <strong>The post is the print</strong>
+        <span>No hidden profile, no ad graph, no invisible second version of the user.</span>
+      </article>
+      <article>
+        <strong>Limits by design</strong>
+        <span>Cooldowns and posting limits reduce spam, rage loops, and addictive behavior.</span>
+      </article>
+      <article>
+        <strong>Clarify only</strong>
+        <span>The Sydney Protocol does not judge, rank, punish, censor, hide posts, or decide truth.</span>
+      </article>
+    </section>
+
+    <div class="content-grid">
+      <section class="forum-area" id="forumArea" aria-label="Forum area"></section>
+
+      <aside class="sidebar" aria-label="Sidebar">
+        <section class="side-card">
+          <h3>Account login</h3>
+          <p>Register or log in with display name + country. Tokens stay in page memory for this prototype.</p>
+          <div id="authPanel" class="auth-panel"></div>
+        </section>
+
+        <section class="side-card">
+          <h3>Translation layer</h3>
+          <p>Every translated post keeps a visible route back to the original language.</p>
+          <div class="note blue">Translated text is a bridge, not a replacement for the original.</div>
+        </section>
+
+        <section class="side-card">
+          <h3>Sydney Protocol prompts</h3>
+          <p>Prompts do not decide truth. They clarify what may need context, evidence, or repair.</p>
+          <div class="note gold">Clarification layer, not enforcement layer.</div>
+        </section>
+
+        <section class="side-card">
+          <h3>Human roles</h3>
+          <ul class="plain-list">
+            <li><strong>Moderators:</strong> enforce hard boundaries and room rules.</li>
+            <li><strong>Evidence reviewers:</strong> add source/context notes, not truth verdicts.</li>
+            <li><strong>Users:</strong> speak, question, clarify, appeal, and repair.</li>
+          </ul>
+        </section>
+
+        <section class="side-card">
+          <h3>Posting limits</h3>
+          <p>This shell models a session-only limit: 3 post attempts per 30 minutes. It is shown as product behavior, not backend enforcement.</p>
+          <div id="limitMeter" class="meter"></div>
+        </section>
+
+
+
+        <section class="side-card">
+          <h3>EU hard-boundary map</h3>
+          <p>Direct harm and illegal-content categories route to human moderation. Sydney Protocol THRESHOLD signals clarify only.</p>
+          <button class="ghost-btn small-btn" id="boundaryMapBtn" type="button">View boundary map</button>
+        </section>
+
+        <section class="side-card">
+          <h3>Human review queue</h3>
+          <p>Reports trigger human review. Human moderators decide visibility. Serious actions require two-moderator review.</p>
+          <div id="reviewQueue" class="review-queue"></div>
+        </section>
+
+
+        <section class="side-card">
+          <h3>Evidence review</h3>
+          <p>Evidence reviewers add source/context notes. They do not decide truth, guilt, corruption, or legitimacy.</p>
+          <div id="evidenceQueue" class="evidence-queue"></div>
+        </section>
+
+        <section class="side-card">
+          <h3>Receipt ledger</h3>
+          <p>Visible local receipts for prompts, evidence notes, and forum actions. No hidden second profile.</p>
+          <div id="receiptLedger" class="receipt-ledger"></div>
+        </section>
+
+        <section class="side-card">
+          <h3>Funding model</h3>
+          <p>Free public forum. Optional donations may later cover server, security, translation, maintenance, and human-review costs.</p>
+          <button class="ghost-btn small-btn" id="sideDonationTransparencyBtn" type="button">View transparency page</button>
+          <div class="note gold">Donations keep the lights on. They do not buy influence.</div>
+        </section>
+
+        <section class="side-card">
+          <h3>Private alpha pack</h3>
+          <p>Setup, runbook, invite, onboarding, test checklist, issue log, shift sheet, report, and go/no-go docs for invited testing.</p>
+          <button class="ghost-btn small-btn" id="sideAlphaReadinessBtn" type="button">View readiness pack</button>
+        </section>
+
+        <section class="side-card">
+          <h3>Recent threads</h3>
+          <div id="recentThreads" class="recent-list"></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="conceptDialog" class="dialog">
+    <form method="dialog">
+      <button class="dialog-close" aria-label="Close">×</button>
+      <h2 id="dialogTitle">Concept</h2>
+      <div id="dialogBody"></div>
+    </form>
+  </dialog>
+
+  <script src="data/localData.js"></script>
+  <script src="data/protocolRules.js"></script>
+  <script src="data/euHardBoundaryMap.js"></script>
+  <script src="data/receiptSystem.js"></script>
+  <script src="data/reviewPipeline.js"></script>
+  <script src="data/evidenceReview.js"></script>
+  <script src="data/donationTransparency.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

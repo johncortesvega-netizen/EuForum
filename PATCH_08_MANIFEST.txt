@@ -1,0 +1,16 @@
+PATCH 08 — Minimal Login
+
+Changed files:
+- backend/eps_backend.py
+- README.md
+- PATCH_STATUS.md
+- docs/PATCH_08_MINIMAL_LOGIN.md
+- docs/ROADMAP.md
+- docs/ROADMAP_TO_LIVE.md
+- tests/test_patch_08_minimal_login.py
+
+Purpose:
+Add a minimal pseudonymous/accountable login backend contract while preserving the privacy boundary: name + country for accountable posting, no hidden profile.
+
+Boundary:
+Sydney Protocol still clarifies only. Login does not add identity verification, EU wallet integration, moderation enforcement, tracking, ads, or behavioral profiling.

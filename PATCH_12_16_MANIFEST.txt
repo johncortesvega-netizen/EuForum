@@ -1,0 +1,30 @@
+European Public Square — Patch 12+16 Manifest
+
+Patch name:
+Evidence Reviewer Notes + Receipts Ledger
+
+Files changed/added:
+- index.html
+- app.js
+- styles.css
+- data/evidenceReview.js
+- data/receiptSystem.js
+- backend/eps_backend.py
+- docs/PATCH_12_16_EVIDENCE_RECEIPTS_LEDGER.md
+- docs/ROADMAP.md
+- PATCH_STATUS.md
+- PATCH_12_16_MANIFEST.txt
+- PATCH_12_16_RECOVERY_NOTE.md
+- tests/test_patch_12_16_evidence_receipts_ledger.py
+
+Scope:
+- Add human evidence/context notes.
+- Add evidence-note receipts.
+- Add filterable receipts ledger.
+- Add backend evidence-note placeholders/endpoints.
+
+Boundaries:
+- Evidence reviewers do not decide truth, guilt, corruption, or legitimacy.
+- Sydney Protocol remains clarify-only for THRESHOLD pressure.
+- Human moderators remain separate from evidence reviewers.
+- No automated filtering or moderation was added.

@@ -1,0 +1,31 @@
+PATCH 15+18 - LOGIN UI + MODERATION DASHBOARD V1
+
+Status: built
+
+Files changed:
+- index.html
+- app.js
+- styles.css
+- README.md
+- PATCH_STATUS.md
+- docs/PATCH_15_18_LOGIN_MODERATION_DASHBOARD.md
+- tests/test_patch_15_18_login_moderation_dashboard.py
+
+Adds:
+- frontend register/login/logout UI;
+- current user display;
+- logged-in posting through backend thread/reply endpoints;
+- composer identity lock to backend display name + country;
+- moderation dashboard page;
+- backend review queue loading;
+- moderator action UI;
+- two-moderator review action UI;
+- local fallback when backend is unavailable.
+
+Boundary:
+- login supports accountable posting only;
+- tokens stay in page memory;
+- no hidden profile;
+- Sydney Protocol remains clarify-only;
+- human moderators decide visibility;
+- serious visibility actions require two-moderator review.

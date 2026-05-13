@@ -1,0 +1,4 @@
+{
+  "note": "Static sample data mirror for v0.3. The browser app uses data/localData.js so index.html can also open from the file system.",
+  "source": "data/localData.js"
+}

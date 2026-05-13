@@ -1,0 +1,28 @@
+PATCH 21 - PRIVATE ALPHA SMOKE TEST + RUNBOOK
+
+Status: built
+
+Files changed:
+- package.json
+- index.html
+- app.js
+- README.md
+- PATCH_STATUS.md
+- backend/eps_backend.py
+- docs/PRIVATE_ALPHA_TEST_RUNBOOK.md
+- tests/private_alpha_smoke_check.mjs
+
+Adds:
+- dependency-free Node smoke test;
+- `npm run smoke`;
+- private alpha test runbook;
+- manual walkthrough for invited sessions;
+- stop conditions for alpha sessions;
+- smoke runbook entry in Alpha Pack UI.
+
+Boundary:
+- smoke pass means ready for a controlled invited session only;
+- still not public launch;
+- no public registration;
+- no real donations/payments;
+- no automated moderation.

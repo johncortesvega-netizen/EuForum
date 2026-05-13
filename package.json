@@ -1,0 +1,11 @@
+{
+  "name": "european-public-square-prototype",
+  "version": "0.18.0",
+  "private": true,
+  "description": "European Public Square local prototype",
+  "scripts": {
+    "serve": "node scripts/local-static-server.mjs",
+    "smoke": "node tests/private_alpha_smoke_check.mjs",
+    "check:js": "node --check app.js"
+  }
+}

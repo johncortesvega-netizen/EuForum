@@ -1,0 +1,38 @@
+European Public Square — Patch 01 Manifest
+
+Patch title:
+Concept Lock / Public Promise Documents
+
+Purpose:
+Lock the European Public Square concept enough for roadmap continuity before adding functional prototype features.
+
+Files included:
+README.md
+PATCH_STATUS.md
+docs/CONCEPT.md
+docs/PUBLIC_PROMISE.md
+docs/PRIVACY_PROMISE.md
+docs/SYDNEY_PROTOCOL_CLARIFY_ONLY.md
+docs/FUNDING_TRANSPARENCY.md
+docs/MODERATION_BOUNDARIES.md
+docs/IDENTITY_READY.md
+docs/ROADMAP_TO_LIVE.md
+tests/test_patch_01_concept_docs.py
+PATCH_01_MANIFEST.txt
+PATCH_01_RECOVERY_NOTE.md
+
+Functional changes:
+None.
+
+Intentional non-changes:
+No backend.
+No login.
+No storage.
+No real translation.
+No moderation enforcement.
+No identity integration.
+No payment system.
+No algorithmic feed.
+
+Boundary:
+Sydney Protocol clarifies only. It does not judge, rank, punish, censor, decide truth, or enforce.

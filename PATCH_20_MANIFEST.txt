@@ -1,0 +1,38 @@
+PATCH 20 - PRIVATE ALPHA READINESS PACK
+
+Status: built
+
+Files changed:
+- index.html
+- app.js
+- styles.css
+- README.md
+- PATCH_STATUS.md
+- backend/eps_backend.py
+- docs/PRIVATE_ALPHA_SETUP_GUIDE.md
+- docs/PRIVATE_ALPHA_ADMIN_CHECKLIST.md
+- docs/PRIVATE_ALPHA_MODERATOR_GUIDE.md
+- docs/PRIVATE_ALPHA_EVIDENCE_REVIEWER_GUIDE.md
+- docs/PRIVATE_ALPHA_PRIVACY_AND_RULES.md
+- docs/PRIVATE_ALPHA_KNOWN_LIMITATIONS.md
+- docs/PRIVATE_ALPHA_FEEDBACK_FORM.md
+- docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md
+- tests/test_patch_20_private_alpha_readiness.py
+
+Adds:
+- setup guide;
+- admin checklist;
+- moderator guide;
+- evidence reviewer guide;
+- privacy/rules page;
+- known limitations;
+- alpha feedback form;
+- private alpha launch checklist;
+- UI readiness pack entrypoint.
+
+Boundary:
+- private alpha candidate means controlled invited testing only;
+- no public launch;
+- no public registration;
+- no real donations/payments;
+- no automated moderation.

@@ -1,0 +1,30 @@
+PATCH 07 — Backend MVP Skeleton
+
+Added:
+- requirements-backend.txt
+- backend/__init__.py
+- backend/eps_backend.py
+- backend/README.md
+- docs/PATCH_07_BACKEND_MVP.md
+- tests/test_patch_07_backend_mvp.py
+
+Updated:
+- README.md
+- PATCH_STATUS.md
+- docs/ROADMAP.md
+- docs/ROADMAP_TO_LIVE.md
+
+Purpose:
+- add first FastAPI + SQLite backend contract for rooms, threads, posts, and receipts;
+- preserve accountable identity display: name + country on posts;
+- preserve privacy boundary: conversation records, not hidden profiles;
+- keep Sydney Protocol clarify-only and separate from moderation enforcement.
+
+Non-goals:
+- no frontend/backend integration yet;
+- no login;
+- no persistent user accounts;
+- no real identity verification;
+- no moderation enforcement;
+- no real translation;
+- no payment/donation integration.

@@ -519,7 +519,7 @@ function showFullReceiptLedger() {
     <p><strong>Purpose:</strong> Receipts make visible forum actions reviewable. They are not hidden behavioral profiles, ad profiles, rankings, or truth verdicts.</p>
     <p><strong>Available receipt types:</strong> ${types.map(escapeHtml).join(", ") || "none yet"}</p>
     ${renderReceiptCards(receipts)}
-    <p><small>Evidence notes, reports, moderation actions, translation notes, protocol prompts, donation placeholders, and post records remain separate receipt types.</small></p>
+    <p><small>Evidence notes, reports, moderation actions, translation notes, Sydney language-trigger receipts, donation placeholders, and post records remain separate receipt types.</small></p>
   `);
 }
 
@@ -528,22 +528,11 @@ function protocolAnalysis(text) {
     return window.EPS_PROTOCOL.analyzeProtocol(text);
   }
   return {
-    engine: "fallback clarify-only prompt layer",
+    engine: "fallback language-trigger receipt layer",
     version: "fallback",
-    decisionBoundary: "Clarify only. No truth verdict. No enforcement.",
-    prompts: [{
-      id: "context_prompt",
-      label: "Context prompt",
-      category: "context",
-      severity: "clarify",
-      prompt: "No protocol engine loaded — human context still matters.",
-      explanation: "The local prompt layer was not available.",
-      boundary: "No prompt is not approval, safety certification, or truth validation.",
-      matches: [],
-      traces: [],
-      quoteContext: false,
-      quoteContextNote: "No quote/example context checked."
-    }]
+    decisionBoundary: "No language-trigger scan available. No truth verdict. No enforcement.",
+    triggerCount: 0,
+    prompts: []
   };
 }
 
@@ -554,19 +543,22 @@ function protocolPreview(text) {
 function selectPrimaryPrompt(analysisOrPrompts) {
   const prompts = Array.isArray(analysisOrPrompts) ? analysisOrPrompts : analysisOrPrompts.prompts;
   const first = prompts?.[0];
-  if (!first) return "Context prompt";
+  if (!first) return "No Sydney trigger";
   if (typeof first === "string") {
     if (first.startsWith("Strong integrity")) return "Evidence prompt";
     if (first.startsWith("Pressure")) return "Pressure prompt";
     if (first.startsWith("Dignity")) return "Dignity prompt";
     if (first.startsWith("Evidence path")) return "Evidence path";
-    return "Context prompt";
+    return "Sydney trigger";
   }
-  return first.label || "Context prompt";
+  return first.label || "Sydney trigger";
 }
 
 function renderPromptList(analysis) {
   const prompts = analysis.prompts || [];
+  if (!prompts.length) {
+    return `<small>No Sydney Protocol language trigger attached to this post. That is not approval, ranking, or a truth verdict.</small>`;
+  }
   return `
     <div class="signal-list">
       ${prompts.map((item) => `
@@ -869,8 +861,8 @@ function renderPost(post) {
         ${appealStatus ? `<small>Appeal status: ${escapeHtml(appealStatus)}</small>` : ""}
       </div>
       <div class="receipt-box">
-        <strong>Visible receipts — post, translation, protocol prompts, human review</strong>
-        <p>${escapeHtml(post.prompt)}</p>
+        <strong>Visible receipts - post, translation, Sydney language triggers, human review</strong>
+        <p>${escapeHtml(post.prompt || "Sydney Protocol is not chosen before posting. It only appears here if language triggers a receipt.")}</p>
         ${post.protocolAnalysis ? renderPromptList(post.protocolAnalysis) : ""}
         <div class="evidence-section"><strong>Evidence reviewer notes</strong>${renderEvidenceNotes(evidenceNotes)}</div>
         ${renderReceiptCards(post.receipts || [])}
@@ -955,7 +947,7 @@ function renderComposer(forumId = state.currentForumId, threadId = state.current
           <ul>
             <li>Can someone ask for evidence without being attacked?</li>
             <li>Does the post preserve the original language/context?</li>
-            <li>Is the Sydney Protocol prompt clarifying only?</li>
+            <li>If language triggers a Sydney receipt, is it clarifying only?</li>
           </ul>
         </div>
         <div id="receiptPreview" class="receipt-preview"></div>
@@ -993,7 +985,7 @@ function previewDraftReceipt(status = "Draft receipt preview. Not stored.") {
   const target = document.getElementById("receiptPreview");
   target.innerHTML = `
     <div class="receipt-box large">
-      <strong>Receipt preview — visible, local, clarify-only</strong>
+      <strong>Receipt preview - visible, local, language-triggered</strong>
       <p>${escapeHtml(status)}</p>
       ${renderPromptList(analysis)}
       ${renderReceiptCards(bundle.receipts)}
@@ -1059,7 +1051,9 @@ async function submitDraft(forumId, threadId) {
     original: body,
     translated: body,
     language: languageToCode(language),
-    prompt: `Clarify only: ${analysis.prompts[0].prompt}`,
+    prompt: analysis.prompts.length
+      ? `Sydney language-trigger receipt: ${analysis.prompts[0].prompt}`
+      : "No Sydney Protocol trigger attached. The post still keeps post, identity, and translation receipts.",
     protocolAnalysis: analysis,
     receipt,
     postHash: bundle.postHash,
@@ -1106,7 +1100,9 @@ async function submitBackendDraft({ forumId, threadId, title, body, language }) 
     original_text: body,
     translated_text: body,
     language_label: languageToCode(language),
-    prompt_text: `Clarify only: ${analysis.prompts[0].prompt}`,
+    prompt_text: analysis.prompts.length
+      ? `Sydney language-trigger receipt: ${analysis.prompts[0].prompt}`
+      : "No Sydney Protocol trigger attached. Post, identity, and translation receipts still apply.",
   };
   if (threadId) {
     const result = await apiRequest(`/api/threads/${encodeURIComponent(threadId)}/replies`, {
@@ -1512,7 +1508,7 @@ async function renderModerationDashboard() {
       <section class="moderation-dashboard">
         <div class="identity-notice">
           <strong>Patch 15+18 boundary</strong>
-          <p>Moderator actions are human, named, receipted, and separate from Sydney Protocol THRESHOLD clarification. Donations, translations, and protocol prompts do not decide visibility.</p>
+          <p>Moderator actions are human, named, receipted, and separate from Sydney Protocol THRESHOLD clarification. Donations, translations, and Sydney language-trigger receipts do not decide visibility.</p>
           <small>${escapeHtml(state.moderationMessage)}${backendError ? ` ${escapeHtml(backendError)}` : ""}</small>
         </div>
         <div class="moderation-grid">
@@ -1814,12 +1810,12 @@ document.getElementById("aboutBtn")?.addEventListener("click", () => {
         <p>Original and reader-language text render side by side. Translation receipts explain that translation is a bridge, not a replacement. No real translation provider is connected.</p>
       </article>
       <article>
-        <strong>Sydney Protocol prompts</strong>
-        <p><code>data/protocolRules.js</code> performs local clarify-only prompt analysis. Prompts surface context questions; they do not judge, rank, punish, hide, or enforce.</p>
+        <strong>Sydney Protocol language triggers</strong>
+        <p><code>data/protocolRules.js</code> scans posted language for listed THRESHOLD signals. It does not choose a mode before posting; matched language creates a visible receipt under the post.</p>
       </article>
       <article>
         <strong>Receipts ledger</strong>
-        <p><code>data/receiptSystem.js</code> creates visible receipts for posts, identity, translation, protocol prompts, reports, moderation, evidence notes, spending, and appeals.</p>
+        <p><code>data/receiptSystem.js</code> creates visible receipts for posts, identity, translation, Sydney language triggers, reports, moderation, evidence notes, spending, and appeals.</p>
       </article>
       <article>
         <strong>Human review</strong>
@@ -1945,7 +1941,7 @@ document.getElementById("receiptsBtn").addEventListener("click", () => {
     <p>Receipts make visible forum actions reviewable without creating a hidden behavioral profile.</p>
     <ul>
       <li>The post remains the primary record.</li>
-      <li>Protocol receipts clarify why prompts appeared.</li>
+      <li>Sydney language-trigger receipts clarify why a post received a THRESHOLD note.</li>
       <li>Translation receipts keep original-language context visible.</li>
       <li>Human review receipts record reports, initial moderator checks, temporary visibility limits, two-moderator panel reviews, and appeals.</li><li>Evidence-note receipts record source/context notes without truth verdicts.</li><li>Donation receipts explain costs, not donor influence.</li>
       <li>Receipts do not decide truth, rank users, or sell attention.</li>

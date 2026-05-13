@@ -8,7 +8,7 @@ window.EPS_PROTOCOL = (() => {
         "corrupt", "corruption", "fraud", "stolen", "criminal", "bribe", "bribery",
         "omkoping", "corruptie", "fraude", "gestolen", "crimineel", "liegen", "lie", "lying"
       ],
-      prompt: "Strong integrity claim — ask for source, scope, and evidence before treating it as established.",
+      prompt: "Strong integrity claim - ask for source, scope, and evidence before treating it as established.",
       explanation: "The text may make or discuss a claim about corruption, fraud, lying, or wrongdoing. The protocol clarifies that evidence and scope are needed.",
       boundary: "This does not declare corruption, guilt, illegality, intent, or truth."
     },
@@ -20,7 +20,7 @@ window.EPS_PROTOCOL = (() => {
         "must", "now", "immediately", "no choice", "only option", "you have to", "trust us",
         "geen keuze", "nu meteen", "moet", "moeten", "vertrouw ons", "enige optie"
       ],
-      prompt: "Pressure or urgency language — clarify whether people can pause, disagree, or ask questions.",
+      prompt: "Pressure or urgency language - clarify whether people can pause, disagree, or ask questions.",
       explanation: "The text may reduce room for pause, disagreement, or review by creating urgency or necessity pressure.",
       boundary: "This does not prove coercion or manipulation. Context may change the reading."
     },
@@ -32,7 +32,7 @@ window.EPS_PROTOCOL = (() => {
         "they all", "these people", "vermin", "enemy", "traitor", "silence them", "shut them up",
         "verraders", "vijand", "monddood", "ongedierte", "dat soort mensen"
       ],
-      prompt: "Dignity or escalation risk — clarify who is meant and avoid reducing people to threat labels.",
+      prompt: "Dignity or escalation risk - clarify who is meant and avoid reducing people to threat labels.",
       explanation: "The text may generalize, escalate, or reduce people into a hostile group label.",
       boundary: "This does not decide intent or require removal. Moderation handles direct harm separately."
     },
@@ -44,7 +44,7 @@ window.EPS_PROTOCOL = (() => {
         "only we can", "we alone", "final decision", "no appeal", "beyond question", "undeniable",
         "alleen wij", "geen bezwaar", "definitief besluit", "onbetwistbaar"
       ],
-      prompt: "Authority claim — clarify who has authority, what mechanism exists, and whether appeal remains possible.",
+      prompt: "Authority claim - clarify who has authority, what mechanism exists, and whether appeal remains possible.",
       explanation: "The text may claim authority or necessity without showing the review or appeal mechanism.",
       boundary: "This does not reject the claim. It asks for mechanism and reviewability."
     },
@@ -56,7 +56,7 @@ window.EPS_PROTOCOL = (() => {
         "safe", "transparent", "accountable", "fair", "trusted", "ethical", "secure",
         "veilig", "transparant", "eerlijk", "verantwoord", "ethisch", "betrouwbaar"
       ],
-      prompt: "Mechanism gap — clarify what concrete safeguard makes this claim reviewable.",
+      prompt: "Mechanism gap - clarify what concrete safeguard makes this claim reviewable.",
       explanation: "The text may use trust or safety language without showing the mechanism behind it.",
       boundary: "This does not say the claim is false. It asks how the claim is supported."
     },
@@ -65,7 +65,7 @@ window.EPS_PROTOCOL = (() => {
       label: "Evidence path",
       category: "evidence_path",
       terms: ["source", "evidence", "proof", "data", "citation", "bewijs", "bron", "cijfers", "rapport"],
-      prompt: "Evidence path visible — keep the source, date, and scope clear so others can review it.",
+      prompt: "Evidence path visible - keep the source, date, and scope clear so others can review it.",
       explanation: "The text mentions sources or evidence, which can help keep the discussion reviewable if details are provided.",
       boundary: "Mentioning evidence is not proof by itself. The source still needs review."
     }
@@ -116,28 +116,11 @@ window.EPS_PROTOCOL = (() => {
       });
     }
 
-    if (!prompts.length) {
-      prompts.push({
-        id: "context_prompt",
-        label: "Context prompt",
-        category: "context",
-        severity: "clarify",
-        prompt: "No obvious protocol prompt in this demo — human context still matters.",
-        explanation: "The simple local scan did not find a listed pressure, evidence, dignity, authority, or mechanism signal.",
-        boundary: "No prompt is not approval, safety certification, or truth validation.",
-        matches: [],
-        traces: [],
-        quoteContext: isQuoteContext,
-        quoteContextNote: isQuoteContext
-          ? "Possible quote/example context detected."
-          : "No quote/example context detected in this simple local scan."
-      });
-    }
-
     return {
-      engine: "Sydney Protocol clarify-only local prompt layer",
+      engine: "Sydney Protocol language-trigger receipt layer",
       version: "eps-protocol-demo-0.4",
-      decisionBoundary: "Clarify only. No truth verdict. No enforcement action. No ranking. No moderation action. No enforcement.",
+      decisionBoundary: "Language-trigger receipts only. No pre-selected prompt. No truth verdict. No enforcement action. No ranking. No moderation action.",
+      triggerCount: prompts.length,
       prompts
     };
   }

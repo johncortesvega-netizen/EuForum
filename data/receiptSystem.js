@@ -79,18 +79,19 @@ window.EPS_RECEIPTS = (() => {
   }
 
   function createProtocolReceipt({ postHash, language, prompt }) {
-    return createReceipt("protocol", {
+    return createReceipt("sydney_language_trigger", {
       postHash,
       language,
       promptCategory: prompt?.category || "context",
       reason: prompt?.category || "clarification",
-      summary: prompt?.prompt || "Sydney Protocol clarification prompt attached.",
+      summary: prompt?.prompt || "Sydney Protocol language-trigger receipt attached under the post.",
       details: [
-        prompt?.explanation || "Clarifies context for human review.",
+        prompt?.explanation || "A language signal triggered a clarification receipt under the post.",
         prompt?.boundary || "No truth verdict. No enforcement.",
+        "This was not chosen by the user before posting.",
         "Sydney Protocol clarifies THRESHOLD pressure only; moderators handle EU hard-boundary categories separately."
       ],
-      boundary: "THRESHOLD clarification only. No judging, ranking, punishment, censorship, truth decision, or enforcement."
+      boundary: "Language-trigger receipt only. No judging, ranking, punishment, censorship, truth decision, or enforcement."
     });
   }
 
@@ -282,7 +283,7 @@ window.EPS_RECEIPTS = (() => {
         "Appeals challenge visibility actions; they do not ask Sydney Protocol to enforce."
       ],
       privacyNote: "Appeal receipts attach to visible moderation process, not hidden user scoring.",
-      boundary: "Appeals remain human-reviewable, receipted, and separate from donations or protocol prompts."
+      boundary: "Appeals remain human-reviewable, receipted, and separate from donations or Sydney language-trigger receipts."
     });
   }
 

@@ -2,7 +2,7 @@
 
 A public demo ready build for a future free, slower multilingual forum for Europe.
 
-European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, a read-only European media feed, and Sydney Protocol prompts that clarify only. This repository is the public demo ready build, not a finished production platform.
+European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, a read-only European media feed, and Sydney Protocol language-trigger receipts that clarify only. This repository is the public demo ready build, not a finished production platform.
 
 For a feature-by-feature explanation of what is implemented and how, see `docs/ABOUT.md`.
 

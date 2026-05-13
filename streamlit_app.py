@@ -120,6 +120,11 @@ st.set_page_config(
 )
 
 st.caption("European Public Square v0.18 - public prototype / demo build")
-render_european_media_feed()
-st.divider()
-components.html(inline_static_assets(), height=1400, scrolling=True)
+
+forum_tab, media_tab = st.tabs(["Forum", "Media Feed"])
+
+with forum_tab:
+    components.html(inline_static_assets(), height=1400, scrolling=True)
+
+with media_tab:
+    render_european_media_feed()

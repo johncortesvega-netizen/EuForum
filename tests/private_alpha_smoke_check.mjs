@@ -76,7 +76,7 @@ expectIncludes("streamlit_app.py", "public demo ready build");
 expectIncludes("docs/PRIVATE_ALPHA_WHAT_TO_TEST.md", "Decision");
 expectIncludes("docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md", "Go / No-Go");
 expectIncludes("docs/ABOUT.md", "Feature Implementation Map");
-expectIncludes("docs/ABOUT.md", "How it is implemented in this prototype");
+expectIncludes("docs/ABOUT.md", "How it is implemented in this public demo");
 expectIncludes("docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "No automated moderation claims");
 expectIncludes("PATCH_STATUS.md", "PUBLIC_DEMO_READY_V1");
 expectIncludes("README.md", "npm run smoke");

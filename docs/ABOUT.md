@@ -1,14 +1,24 @@
 # About European Public Square
 
-European Public Square is currently a public demo ready build for a future free, slower multilingual forum for Europe.
+European Public Square is a public demo ready build for a future free, slower multilingual forum for Europe.
 
-It is built to test a public-square model: structured rooms and threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.
+The concept is simple: make online public debate slower, more accountable, more multilingual, and easier to review without turning the forum into an engagement feed, surveillance product, truth machine, or automated censorship system.
 
-This is an open demo/testing build. It is public to try, explain, and collect feedback on, but it is not a finished production platform.
+This demo tests that model through structured rooms and threads, original-language preservation, visible receipts, accountable identity display, human review, appeal paths, donation transparency without donor influence, and a read-only European media feed.
+
+This is public to try, explain, and collect feedback on. It is not a finished production platform.
+
+## How The Demo Works
+
+- The forum is the main space for rooms, threads, replies, receipts, moderation surfaces, appeals, and transparency pages.
+- The Media Feed is a read-only tab that shows headlines from European media RSS feeds and sends readers to the original outlet.
+- The About view explains the feature set and the implementation boundary so testers can see what is real, what is mocked, and what is intentionally absent.
+- The optional backend adds local login, logged-in posting, review queue endpoints, and moderator action endpoints when FastAPI is running.
+- The Streamlit app packages the forum and the RSS tab into one public demo entrypoint.
 
 ## Feature Implementation Map
 
-| Feature | What it does | How it is implemented in this prototype |
+| Feature | What it does | How it is implemented in this public demo |
 | --- | --- | --- |
 | Old-school forum structure | Uses rooms, threads, and replies instead of an algorithmic feed. | Frontend data is loaded from `data/localData.js`; the UI renders categories, rooms, thread lists, post cards, and recent threads in `app.js`. |
 | Local posting | Lets testers create local demo threads and replies. | Composer state lives in browser page memory. Local drafts disappear on refresh unless the optional backend is running and logged-in posting is used. |
@@ -25,9 +35,17 @@ This is an open demo/testing build. It is public to try, explain, and collect fe
 | Moderation dashboard | Gives moderators a first review queue/action surface. | `app.js` renders a moderation dashboard that loads `/api/review-queue` when backend is available and falls back to local demo queue otherwise. |
 | Appeal flow | Lets users challenge serious visibility actions. | Appeal buttons appear when a post review state is appealable. `app.js` tracks submitted/under-review/resolved statuses and creates appeal receipts. |
 | Donation transparency | Explains costs without enabling donor influence. | `data/donationTransparency.js` stores mock monthly costs and spending receipts. The UI renders a transparency page; no payment processor is connected. |
-| European media feed | Shows read-only headlines from European media outlets and newspapers. | `data/europeanMediaFeeds.json` lists RSS sources. `streamlit_app.py` loads them server-side with `feedparser`, caches for 10 minutes, and shows `Open original` links only. No replies or comments attach to feed items. |
-| Public prototype launch kit | Prepares public demo testing and session review. | `docs/PRIVATE_ALPHA_*` files provide setup, admin, moderation, evidence review, privacy/rules, limitations, feedback, launch checklist, runbook, invite, onboarding, issue log, shift sheet, session report, and go/no-go docs. |
+| European media feed | Shows read-only headlines from European media outlets and newspapers. | `data/europeanMediaFeeds.json` lists RSS sources. `streamlit_app.py` loads them server-side with `feedparser`, caches for 10 minutes, and shows `Open original` links only. No replies or comments attach to feed items. The static forum also has a Media Feed view that explains the configured outlet sources. |
+| Public demo launch kit | Prepares public demo testing and session review. | `docs/PRIVATE_ALPHA_*` files provide setup, admin, moderation, evidence review, privacy/rules, limitations, feedback, launch checklist, runbook, invite, onboarding, issue log, shift sheet, session report, and go/no-go docs. They remain named for the earlier private-alpha milestone but now serve as the structured demo-readiness kit. |
 | Smoke test | Gives a dependency-free readiness check. | `tests/private_alpha_smoke_check.mjs` checks required files, UI markers, receipt functions, docs, status, and forbidden browser persistence APIs. Run with `npm.cmd run smoke` on Windows PowerShell. |
+
+## Public Demo Boundaries
+
+- Public demo ready means the concept can be opened, tested, explained, and reviewed.
+- It does not mean the platform is ready for production civic use.
+- Feed headlines belong to the original publishers; discussion happens on the outlet's own site or app, not inside the feed.
+- Moderation, receipts, appeals, and donation transparency are demo flows unless connected to production systems later.
+- Sydney Protocol prompts are clarification prompts only. They do not judge truth, rank users, hide content, punish anyone, or enforce policy.
 
 ## What Is Not Implemented Yet
 

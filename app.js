@@ -1793,8 +1793,9 @@ document.getElementById("mediaFeedBtn")?.addEventListener("click", () => {
 
 document.getElementById("aboutBtn")?.addEventListener("click", () => {
   showDialog("About European Public Square", `
-    <p><strong>European Public Square</strong> is currently a public prototype for a future European public-square model. It tests rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
-    <p><strong>Current stage:</strong> open demo/testing build. It is public to try, but it is not a finished production platform.</p>
+    <p><strong>European Public Square</strong> is a public demo ready build for a future European public-square model: slower forum discussion, multilingual reading, accountable identity display, visible receipts, human review, appeal paths, donation transparency without donor influence, and a read-only European media feed.</p>
+    <p><strong>Current stage:</strong> open demo/testing build. It is public to try, explain, and collect feedback on, but it is not a finished production platform.</p>
+    <p><strong>Main idea:</strong> keep public debate structured and reviewable without turning the platform into an engagement feed, surveillance product, truth machine, or automated censorship system.</p>
     <div class="feature-map">
       <article>
         <strong>Forum structure</strong>
@@ -1837,15 +1838,19 @@ document.getElementById("aboutBtn")?.addEventListener("click", () => {
         <p><code>data/donationTransparency.js</code> provides mock monthly costs and spending receipts. No payment processor is connected. Donations buy no influence.</p>
       </article>
       <article>
-        <strong>Public prototype kit</strong>
-        <p>The <code>docs/PRIVATE_ALPHA_*</code> files now serve as the launch/testing kit: setup, runbook, onboarding, test checklist, issue log, moderator shifts, session report, and go/no-go decision.</p>
+        <strong>European media feed</strong>
+        <p><code>data/europeanMediaFeeds.json</code> lists RSS sources. <code>streamlit_app.py</code> loads them with <code>feedparser</code>, caches results for 10 minutes, and shows <em>Open original</em> links. Feed items have no replies here.</p>
+      </article>
+      <article>
+        <strong>Public demo kit</strong>
+        <p>The <code>docs/PRIVATE_ALPHA_*</code> files now serve as the structured testing kit: setup, runbook, onboarding, test checklist, issue log, moderator shifts, session report, and go/no-go decision.</p>
       </article>
       <article>
         <strong>Smoke test</strong>
-        <p><code>tests/private_alpha_smoke_check.mjs</code> verifies the alpha shell, docs, core UI markers, receipt functions, and no forbidden browser persistence APIs.</p>
+        <p><code>tests/private_alpha_smoke_check.mjs</code> verifies the demo shell, docs, core UI markers, receipt functions, RSS markers, and no forbidden browser persistence APIs.</p>
       </article>
     </div>
-    <p><strong>Not implemented:</strong> real translation, real donations/payments, production auth, production moderation case management, automated moderation, ranking, or hidden behavioral profiles.</p>
+    <p><strong>Not implemented:</strong> real translation, real donations/payments, production auth, production moderation case management, production appeal assignment, automated moderation, ranking, or hidden behavioral profiles.</p>
     <p><small>Full implementation map: <code>docs/ABOUT.md</code>.</small></p>
   `);
 });

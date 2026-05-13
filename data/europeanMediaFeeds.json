@@ -1,0 +1,42 @@
+[
+  {
+    "name": "BBC News Europe",
+    "country": "United Kingdom",
+    "language": "English",
+    "feed_url": "http://feeds.bbci.co.uk/news/world/europe/rss.xml",
+    "site_url": "https://www.bbc.com/news/world/europe",
+    "note": "Official BBC News Europe RSS feed."
+  },
+  {
+    "name": "France 24 Europe",
+    "country": "France",
+    "language": "English",
+    "feed_url": "https://www.france24.com/en/europe/rss",
+    "site_url": "https://www.france24.com/en/europe/",
+    "note": "France 24 Europe RSS feed."
+  },
+  {
+    "name": "Deutsche Welle Europe",
+    "country": "Germany",
+    "language": "English",
+    "feed_url": "https://rss.dw.com/rdf/rss-en-eu",
+    "site_url": "https://www.dw.com/en/europe/s-1433",
+    "note": "DW Europe RSS feed."
+  },
+  {
+    "name": "The Guardian Europe",
+    "country": "United Kingdom",
+    "language": "English",
+    "feed_url": "https://www.theguardian.com/world/europe-news/rss",
+    "site_url": "https://www.theguardian.com/world/europe-news",
+    "note": "Guardian section RSS feed using the publisher's /rss pattern."
+  },
+  {
+    "name": "POLITICO Europe",
+    "country": "Belgium / EU",
+    "language": "English",
+    "feed_url": "https://www.politico.eu/feed/rss/",
+    "site_url": "https://www.politico.eu/",
+    "note": "POLITICO Europe RSS feed pattern."
+  }
+]

@@ -28,6 +28,7 @@ The prototype currently includes:
 - donation transparency page with monthly server-cost table;
 - public spending receipt model;
 - local appeal button, appeal status, and appeal receipts for appealable visibility actions;
+- read-only European media RSS feed in Streamlit with links to original outlets;
 - public prototype setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, feedback form, and launch checklist;
 - dependency-free public prototype smoke check and test runbook;
 - onboarding, what-to-test checklist, issue log, moderator shift sheet, session report, and go/no-go decision docs;
@@ -97,6 +98,7 @@ See:
 - `docs/WHAT_THIS_IS_NOT.md`
 - `docs/ROADMAP_TO_PRIVATE_ALPHA.md`
 - `docs/EU_HARD_BOUNDARY_MAP.md`
+- `docs/EUROPEAN_MEDIA_FEED.md`
 
 ## Not included yet
 

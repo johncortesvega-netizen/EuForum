@@ -45,6 +45,8 @@ const requiredFiles = [
   "docs/PRIVATE_ALPHA_SESSION_REPORT.md",
   "docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md",
   "docs/ABOUT.md",
+  "docs/EUROPEAN_MEDIA_FEED.md",
+  "data/europeanMediaFeeds.json",
   "PATCH_STATUS.md",
   "README.md",
   "streamlit_app.py",
@@ -77,7 +79,13 @@ expectIncludes("PATCH_STATUS.md", "PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT");
 expectIncludes("README.md", "npm run smoke");
 expectIncludes("streamlit_app.py", "components.html");
 expectIncludes("streamlit_app.py", "inline_static_assets");
+expectIncludes("streamlit_app.py", "render_european_media_feed");
+expectIncludes("streamlit_app.py", "st.cache_data(ttl=600");
+expectIncludes("streamlit_app.py", "Open original");
 expectIncludes("requirements.txt", "streamlit");
+expectIncludes("requirements.txt", "feedparser");
+expectIncludes("docs/EUROPEAN_MEDIA_FEED.md", "There are no replies");
+expectIncludes("data/europeanMediaFeeds.json", "BBC News Europe");
 
 for (const forbidden of ["localStorage", "sessionStorage", "XMLHttpRequest", "indexedDB", "navigator.sendBeacon"]) {
   expectNotIncludes("app.js", forbidden);

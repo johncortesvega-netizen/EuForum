@@ -1,8 +1,8 @@
 # European Public Square v0.18
 
-A private alpha prototype for a future free, slower multilingual forum for Europe.
+A public prototype for a future free, slower multilingual forum for Europe.
 
-European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only. This repository is the private alpha prototype, not open public access or public launch.
+European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only. This repository is the public prototype/demo build, not a finished production platform.
 
 For a feature-by-feature explanation of what is implemented and how, see `docs/ABOUT.md`.
 
@@ -28,9 +28,9 @@ The prototype currently includes:
 - donation transparency page with monthly server-cost table;
 - public spending receipt model;
 - local appeal button, appeal status, and appeal receipts for appealable visibility actions;
-- private alpha setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, feedback form, and launch checklist;
-- dependency-free private alpha smoke check and test runbook;
-- invite text, tester onboarding, what-to-test checklist, issue log, moderator shift sheet, session report, and go/no-go decision docs;
+- public prototype setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, feedback form, and launch checklist;
+- dependency-free public prototype smoke check and test runbook;
+- onboarding, what-to-test checklist, issue log, moderator shift sheet, session report, and go/no-go decision docs;
 - public concept, public-good, donation transparency, open-source/stewardship, and private-alpha roadmap documents;
 - EU hard-boundary map for direct-harm categories;
 - Sydney Protocol THRESHOLD layer for clarification only.
@@ -60,9 +60,9 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-## Private alpha smoke check
+## Public prototype smoke check
 
-Run the dependency-free smoke gate before invited sessions:
+Run the dependency-free smoke gate before demo sessions:
 
 ```bash
 npm run smoke
@@ -148,18 +148,18 @@ Boundary: donations buy no influence. Appeals are human-reviewable and receipted
 
 Adds the private alpha readiness pack: setup guide, admin checklist, moderator guide, evidence reviewer guide, privacy/rules page, known limitations, alpha feedback form, and private alpha launch checklist.
 
-Boundary: private alpha candidate means controlled invited testing only. It is still not public launch.
+Boundary: this made the prototype ready for structured testing. It was later opened as a public prototype/demo build.
 
 
 ## Patch 21
 
-Adds a dependency-free private alpha smoke test, `npm run smoke`, and a private alpha test runbook with manual walkthrough and stop conditions.
+Adds a dependency-free prototype smoke test, `npm run smoke`, and a test runbook with manual walkthrough and stop conditions.
 
-Boundary: passing smoke means ready for a controlled invited session only. It is still not public launch.
+Boundary: passing smoke means ready for a demo/test session only. It is still not a finished production platform.
 
 
 ## Patch 22
 
 Adds the first invited alpha session kit: invite text, tester onboarding, what-to-test checklist, issue log template, moderator shift sheet, session report, and go/no-go decision doc.
 
-Boundary: this prepares a controlled invited session only. It is still not public launch.
+Boundary: this prepares structured testing. The current repo is now positioned as a public prototype/demo, not a finished production platform.

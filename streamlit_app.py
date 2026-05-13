@@ -36,5 +36,5 @@ st.set_page_config(
     layout="wide",
 )
 
-st.caption("European Public Square v0.18 - private alpha prototype")
+st.caption("European Public Square v0.18 - public prototype / demo build")
 components.html(inline_static_assets(), height=1400, scrolling=True)

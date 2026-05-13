@@ -8,9 +8,9 @@
 // Patch 12+16 phrase: Evidence reviewers add source/context notes, not truth verdicts. Receipts ledger is visible and filterable.
 // Patch 15+18 phrase: Backend login connects to frontend; moderators get a review queue page and two-moderator action UI.
 // Patch 17+19 phrase: Donation transparency shows mock public spending receipts; appeals are visible, receipted, and buy no influence.
-// Patch 20 phrase: Private alpha readiness pack means controlled invited testing, not public launch.
-// Patch 21 phrase: Private alpha smoke test and runbook gate invited sessions before public launch.
-// Patch 22 phrase: First invited alpha session kit turns readiness into a controlled test session, still not public launch.
+// Patch 20 phrase: Readiness pack prepared controlled testing before the public demo.
+// Patch 21 phrase: Prototype smoke test and runbook gate demo sessions before production claims.
+// Patch 22 phrase: First test session kit turns readiness into structured demo testing.
 // Legacy invariant phrase preserved: Sydney Protocol clarifies only.
 const sourceData = window.EPS_LOCAL_DATA || { categories: [], threadsByForum: {} };
 
@@ -1541,7 +1541,7 @@ function renderDonationTransparencyPage() {
         </div>
         <h3>Public spending receipts</h3>
         ${renderReceiptCards(spendingReceipts)}
-        <p><small>No real donation or payment processing is connected. This is a private-alpha transparency mock for a future public-interest funding model.</small></p>
+        <p><small>No real donation or payment processing is connected. This is a public-prototype transparency mock for a future public-interest funding model.</small></p>
       </section>
     </article>
   `;
@@ -1553,14 +1553,14 @@ function renderPrivateAlphaReadinessPack() {
   state.currentForumId = null;
   state.currentThreadId = null;
   const docs = [
-    ["Setup guide", "docs/PRIVATE_ALPHA_SETUP_GUIDE.md", "How to run the static frontend and optional backend for invited testing."],
+    ["Setup guide", "docs/PRIVATE_ALPHA_SETUP_GUIDE.md", "How to run the static frontend and optional backend for demo testing."],
     ["Admin checklist", "docs/PRIVATE_ALPHA_ADMIN_CHECKLIST.md", "Session operations, access, review, and closeout checks."],
     ["Moderator guide", "docs/PRIVATE_ALPHA_MODERATOR_GUIDE.md", "Human moderation boundaries, serious actions, receipts, and appeals."],
     ["Evidence reviewer guide", "docs/PRIVATE_ALPHA_EVIDENCE_REVIEWER_GUIDE.md", "Source/context notes without truth verdicts."],
     ["Privacy and rules", "docs/PRIVATE_ALPHA_PRIVACY_AND_RULES.md", "Minimal records, no hidden profile, and alpha rules."],
     ["Known limitations", "docs/PRIVATE_ALPHA_KNOWN_LIMITATIONS.md", "What the prototype cannot safely claim yet."],
     ["Feedback form", "docs/PRIVATE_ALPHA_FEEDBACK_FORM.md", "Questions for testers without hidden profiling."],
-    ["Launch checklist", "docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "Gate checklist and stop conditions for private alpha."],
+    ["Launch checklist", "docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "Gate checklist and stop conditions for demo testing."],
     ["Smoke test runbook", "docs/PRIVATE_ALPHA_TEST_RUNBOOK.md", "Dependency-free smoke check and manual walkthrough before invited sessions."],
     ["Invite text", "docs/PRIVATE_ALPHA_INVITE_TEXT.md", "Plain invitation copy for controlled testers."],
     ["Tester onboarding", "docs/PRIVATE_ALPHA_TESTER_ONBOARDING.md", "What this is, what it is not, and what testers should try."],
@@ -1575,14 +1575,14 @@ function renderPrivateAlphaReadinessPack() {
       <header class="category-head category-head-row">
         <div>
           <button class="back-link" type="button" data-home>Back to square</button>
-          <h2>Private alpha readiness pack</h2>
-          <p>Controlled invited testing only. Not public launch, not public registration, not production moderation.</p>
+          <h2>Public prototype launch kit</h2>
+          <p>Open demo/testing build. Not a finished production platform, not production moderation, and not a real payment system.</p>
         </div>
       </header>
       <section class="alpha-pack">
         <div class="identity-notice">
-          <strong>Private alpha candidate</strong>
-          <p>Patch 22 prepares the first controlled invited session. It keeps real donations, public registration, production identity verification, and automated moderation out of scope.</p>
+          <strong>Public prototype</strong>
+          <p>This build is meant to be publicly testable while keeping real donations, production identity verification, production moderation, and automated enforcement out of scope.</p>
         </div>
         <div class="alpha-doc-grid">
           ${docs.map(([title, href, summary]) => `
@@ -1596,10 +1596,10 @@ function renderPrivateAlphaReadinessPack() {
         <div class="clarity-checklist">
           <strong>Alpha gate</strong>
           <ul>
-            <li>20-50 invited users maximum.</li>
-            <li>3-5 rooms and 2-3 languages maximum.</li>
+            <li>Public demo feedback is welcome, but production claims stay off.</li>
+            <li>Keep rooms and languages limited while testing.</li>
             <li>Receipts, appeals, moderation boundaries, and limitations visible before testing.</li>
-            <li>No public launch claims.</li>
+            <li>No finished-platform claims.</li>
           </ul>
         </div>
       </section>
@@ -1705,8 +1705,8 @@ document.getElementById("homeBtn").addEventListener("click", () => renderForums(
 
 document.getElementById("aboutBtn")?.addEventListener("click", () => {
   showDialog("About European Public Square", `
-    <p><strong>European Public Square</strong> is currently a private alpha prototype for a future public-square model. It tests rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
-    <p><strong>Current stage:</strong> controlled invited testing only. It is not open public access, not public registration, and not public launch.</p>
+    <p><strong>European Public Square</strong> is currently a public prototype for a future European public-square model. It tests rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
+    <p><strong>Current stage:</strong> open demo/testing build. It is public to try, but it is not a finished production platform.</p>
     <div class="feature-map">
       <article>
         <strong>Forum structure</strong>
@@ -1749,15 +1749,15 @@ document.getElementById("aboutBtn")?.addEventListener("click", () => {
         <p><code>data/donationTransparency.js</code> provides mock monthly costs and spending receipts. No payment processor is connected. Donations buy no influence.</p>
       </article>
       <article>
-        <strong>Private alpha pack</strong>
-        <p>The <code>docs/PRIVATE_ALPHA_*</code> files cover setup, runbook, invite, onboarding, test checklist, issue log, moderator shifts, session report, and go/no-go decision.</p>
+        <strong>Public prototype kit</strong>
+        <p>The <code>docs/PRIVATE_ALPHA_*</code> files now serve as the launch/testing kit: setup, runbook, onboarding, test checklist, issue log, moderator shifts, session report, and go/no-go decision.</p>
       </article>
       <article>
         <strong>Smoke test</strong>
         <p><code>tests/private_alpha_smoke_check.mjs</code> verifies the alpha shell, docs, core UI markers, receipt functions, and no forbidden browser persistence APIs.</p>
       </article>
     </div>
-    <p><strong>Not implemented:</strong> public launch, public registration, real translation, real donations/payments, production auth, production moderation case management, automated moderation, ranking, or hidden behavioral profiles.</p>
+    <p><strong>Not implemented:</strong> real translation, real donations/payments, production auth, production moderation case management, automated moderation, ranking, or hidden behavioral profiles.</p>
     <p><small>Full implementation map: <code>docs/ABOUT.md</code>.</small></p>
   `);
 });
@@ -1832,7 +1832,7 @@ document.getElementById("fundingBtn").addEventListener("click", () => {
     .map((item) => receiptSystem()?.createSpendingReceipt?.(item))
     .filter(Boolean);
   showDialog("Funding concept", `
-    <p>European Public Square is testing a future public-interest funding model. In this private alpha, optional donations are mock-only and no payment processor is connected.</p>
+    <p>European Public Square is testing a future public-interest funding model. In this public prototype, optional donations are mock-only and no payment processor is connected.</p>
     <ul>
       <li>Donations do not buy ranking, speech privilege, moderation privilege, or governance control.</li>
       <li>Spending should be shown through public receipts.</li>

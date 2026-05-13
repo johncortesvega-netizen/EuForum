@@ -1,10 +1,10 @@
 # About European Public Square
 
-European Public Square is currently a private alpha prototype for a future free, slower multilingual forum for Europe.
+European Public Square is currently a public prototype for a future free, slower multilingual forum for Europe.
 
 It is built to test a public-square model: structured rooms and threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.
 
-This is a private alpha candidate. It is not open public access, not public registration, and not a public launch.
+This is an open demo/testing build. It is public to try, but it is not a finished production platform.
 
 ## Feature Implementation Map
 
@@ -25,13 +25,11 @@ This is a private alpha candidate. It is not open public access, not public regi
 | Moderation dashboard | Gives moderators a first review queue/action surface. | `app.js` renders a moderation dashboard that loads `/api/review-queue` when backend is available and falls back to local demo queue otherwise. |
 | Appeal flow | Lets users challenge serious visibility actions. | Appeal buttons appear when a post review state is appealable. `app.js` tracks submitted/under-review/resolved statuses and creates appeal receipts. |
 | Donation transparency | Explains costs without enabling donor influence. | `data/donationTransparency.js` stores mock monthly costs and spending receipts. The UI renders a transparency page; no payment processor is connected. |
-| Private alpha readiness pack | Prepares controlled invited testing. | `docs/PRIVATE_ALPHA_*` files provide setup, admin, moderation, evidence review, privacy/rules, limitations, feedback, launch checklist, runbook, invite, onboarding, issue log, shift sheet, session report, and go/no-go docs. |
+| Public prototype launch kit | Prepares public demo testing and session review. | `docs/PRIVATE_ALPHA_*` files provide setup, admin, moderation, evidence review, privacy/rules, limitations, feedback, launch checklist, runbook, invite, onboarding, issue log, shift sheet, session report, and go/no-go docs. |
 | Smoke test | Gives a dependency-free readiness check. | `tests/private_alpha_smoke_check.mjs` checks required files, UI markers, receipt functions, docs, status, and forbidden browser persistence APIs. Run with `npm.cmd run smoke` on Windows PowerShell. |
 
 ## What Is Not Implemented Yet
 
-- No public launch.
-- No public registration.
 - No production authentication provider.
 - No persistent browser token storage.
 - No real translation provider.

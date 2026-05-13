@@ -66,6 +66,8 @@ expectIncludes("data/receiptSystem.js", "createAppealReceipt");
 expectIncludes("data/receiptSystem.js", "createSpendingReceipt");
 expectIncludes("docs/PRIVATE_ALPHA_TEST_RUNBOOK.md", "Smoke Test");
 expectIncludes("docs/PRIVATE_ALPHA_INVITE_TEXT.md", "controlled invited test");
+expectIncludes("README.md", "public prototype/demo build");
+expectIncludes("streamlit_app.py", "public prototype / demo build");
 expectIncludes("docs/PRIVATE_ALPHA_WHAT_TO_TEST.md", "Decision");
 expectIncludes("docs/PRIVATE_ALPHA_GO_NO_GO_DECISION.md", "Go / No-Go");
 expectIncludes("docs/ABOUT.md", "Feature Implementation Map");
@@ -82,9 +84,9 @@ for (const forbidden of ["localStorage", "sessionStorage", "XMLHttpRequest", "in
 }
 
 if (failures.length) {
-  console.error("Private alpha smoke check failed:");
+  console.error("Prototype smoke check failed:");
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log("Private alpha smoke check passed.");
+console.log("Prototype smoke check passed.");

@@ -1,8 +1,8 @@
 # European Public Square v0.18
 
-A free, slower multilingual forum prototype for Europe.
+A private alpha prototype for a future free, slower multilingual forum for Europe.
 
-European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only.
+European Public Square is designed as an old-school forum structure with modern translation concepts, visible receipts, accountable identity display, posting limits, and Sydney Protocol prompts that clarify only. This repository is the private alpha prototype, not open public access or public launch.
 
 For a feature-by-feature explanation of what is implemented and how, see `docs/ABOUT.md`.
 

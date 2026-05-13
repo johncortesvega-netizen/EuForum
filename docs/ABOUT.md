@@ -1,10 +1,10 @@
 # About European Public Square
 
-European Public Square is a free, slower multilingual forum prototype for Europe.
+European Public Square is currently a private alpha prototype for a future free, slower multilingual forum for Europe.
 
 It is built to test a public-square model: structured rooms and threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.
 
-This is a private alpha candidate. It is not a public launch.
+This is a private alpha candidate. It is not open public access, not public registration, and not a public launch.
 
 ## Feature Implementation Map
 

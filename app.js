@@ -1541,7 +1541,7 @@ function renderDonationTransparencyPage() {
         </div>
         <h3>Public spending receipts</h3>
         ${renderReceiptCards(spendingReceipts)}
-        <p><small>No real donation or payment processing is connected. This is a public transparency model for private alpha readiness.</small></p>
+        <p><small>No real donation or payment processing is connected. This is a private-alpha transparency mock for a future public-interest funding model.</small></p>
       </section>
     </article>
   `;
@@ -1705,8 +1705,8 @@ document.getElementById("homeBtn").addEventListener("click", () => renderForums(
 
 document.getElementById("aboutBtn")?.addEventListener("click", () => {
   showDialog("About European Public Square", `
-    <p><strong>European Public Square</strong> is a free, slower multilingual forum prototype for Europe. It tests a public-square model built around rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
-    <p><strong>Current stage:</strong> private alpha candidate. Controlled invited testing only; still not public launch.</p>
+    <p><strong>European Public Square</strong> is currently a private alpha prototype for a future public-square model. It tests rooms, threads, original-language preservation, visible receipts, accountable identity, human review, appeal paths, and donation transparency without donor influence.</p>
+    <p><strong>Current stage:</strong> controlled invited testing only. It is not open public access, not public registration, and not public launch.</p>
     <div class="feature-map">
       <article>
         <strong>Forum structure</strong>
@@ -1832,11 +1832,11 @@ document.getElementById("fundingBtn").addEventListener("click", () => {
     .map((item) => receiptSystem()?.createSpendingReceipt?.(item))
     .filter(Boolean);
   showDialog("Funding concept", `
-    <p>European Public Square is designed as a free public-interest forum. Optional donations may later help cover server, security, backup, translation, maintenance, and human-review costs.</p>
+    <p>European Public Square is testing a future public-interest funding model. In this private alpha, optional donations are mock-only and no payment processor is connected.</p>
     <ul>
       <li>Donations do not buy ranking, speech privilege, moderation privilege, or governance control.</li>
       <li>Spending should be shown through public receipts.</li>
-      <li>The public forum remains free to use.</li>
+      <li>The future forum should remain free to use.</li>
       <li>No ads, no data monetization, no hidden behavioral profile.</li>
     </ul>
     <p><strong>Boundary:</strong> Donations keep the lights on. They do not buy influence.</p>

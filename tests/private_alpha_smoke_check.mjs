@@ -47,6 +47,8 @@ const requiredFiles = [
   "docs/ABOUT.md",
   "PATCH_STATUS.md",
   "README.md",
+  "streamlit_app.py",
+  "requirements.txt",
 ];
 
 for (const file of requiredFiles) expectFile(file);
@@ -71,6 +73,9 @@ expectIncludes("docs/ABOUT.md", "How it is implemented in this prototype");
 expectIncludes("docs/PRIVATE_ALPHA_LAUNCH_CHECKLIST.md", "No automated moderation claims");
 expectIncludes("PATCH_STATUS.md", "PATCH_22_FIRST_INVITED_ALPHA_SESSION_KIT");
 expectIncludes("README.md", "npm run smoke");
+expectIncludes("streamlit_app.py", "components.html");
+expectIncludes("streamlit_app.py", "inline_static_assets");
+expectIncludes("requirements.txt", "streamlit");
 
 for (const forbidden of ["localStorage", "sessionStorage", "XMLHttpRequest", "indexedDB", "navigator.sendBeacon"]) {
   expectNotIncludes("app.js", forbidden);

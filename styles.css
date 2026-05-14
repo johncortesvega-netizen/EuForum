@@ -928,3 +928,46 @@ h1 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.05; letter-
 @media (max-width: 760px) {
   .evidence-action-grid { grid-template-columns: 1fr; }
 }
+
+.media-composer-card {
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: #fbfdff;
+  box-shadow: 0 10px 24px rgba(8, 35, 92, 0.06);
+  overflow: hidden;
+}
+.media-composer-card summary {
+  padding: 0.85rem 1rem;
+  color: var(--blue-900);
+  background: var(--blue-50);
+  font-weight: 850;
+  cursor: pointer;
+}
+.media-composer-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+.media-composer-body label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--slate-700);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+.media-composer-body input,
+.media-composer-body select,
+.media-composer-body textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.75rem 0.8rem;
+  color: var(--slate-950);
+  background: var(--white);
+  outline: none;
+}
+.media-composer-body textarea { resize: vertical; line-height: 1.5; }
+.media-composer-body input:focus,
+.media-composer-body select:focus,
+.media-composer-body textarea:focus { box-shadow: 0 0 0 4px rgba(27, 79, 180, 0.14); }
+.compact-pause { margin-bottom: 0 !important; }

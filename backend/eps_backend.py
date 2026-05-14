@@ -9,14 +9,13 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-import json
 import os
 import secrets
 import sqlite3
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,6 +27,12 @@ LOGIN_BOUNDARY = "Minimal login supports accountable posting: display name + cou
 HUMAN_REVIEW_BOUNDARY = "Reports trigger review. Human moderators decide visibility. Serious actions require two-moderator review."
 EU_HARD_BOUNDARY_BOUNDARY = "European legal and human-rights categories define the hard floor for direct harm; Sydney Protocol handles THRESHOLD pressure by clarification only."
 EVIDENCE_REVIEW_BOUNDARY = "Evidence reviewers add source/context notes. They do not decide truth, guilt, corruption, or legitimacy."
+ON_DEMAND_RECEIPT_BOUNDARY = "Sydney Protocol and clarity receipts are generated only when requested; they are not stored as user records, ranking signals, behavioral profiles, or moderation decisions."
+POSTING_LIMIT_BOUNDARY = "Logged-in posting is rate-limited server-side: 3 posts per 30 minutes, 45-second cooldown, and short-window duplicate blocking."
+POST_WINDOW_MINUTES = 30
+POST_COOLDOWN_SECONDS = 45
+MAX_POSTS_PER_WINDOW = 3
+DUPLICATE_BLOCK_MINUTES = 10
 DB_PATH = Path(os.environ.get("EPS_DB_PATH", Path(__file__).resolve().parents[1] / "data" / "eps_local.sqlite3"))
 
 EU_HARD_BOUNDARY_CATEGORIES = [
@@ -171,24 +176,11 @@ CREATE TABLE IF NOT EXISTS posts (
     updated_at TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS receipts (
-    id TEXT PRIMARY KEY,
-    post_id TEXT REFERENCES posts(id),
-    receipt_type TEXT NOT NULL,
-    summary TEXT NOT NULL,
-    details_json TEXT NOT NULL,
-    boundary TEXT NOT NULL,
-    created_at TEXT NOT NULL
-);
-
 CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token_hash);
 CREATE INDEX IF NOT EXISTS idx_threads_room ON threads(room_id);
 CREATE INDEX IF NOT EXISTS idx_threads_user ON threads(user_id);
 CREATE INDEX IF NOT EXISTS idx_posts_thread ON posts(thread_id);
 CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id);
-CREATE INDEX IF NOT EXISTS idx_receipts_post ON receipts(post_id);
-
-
 CREATE TABLE IF NOT EXISTS reports (
     id TEXT PRIMARY KEY,
     post_id TEXT NOT NULL REFERENCES posts(id),
@@ -229,6 +221,19 @@ CREATE TABLE IF NOT EXISTS evidence_notes (
 );
 
 CREATE INDEX IF NOT EXISTS idx_evidence_notes_post ON evidence_notes(post_id);
+
+CREATE TABLE IF NOT EXISTS post_events (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    thread_id TEXT DEFAULT NULL REFERENCES threads(id),
+    post_id TEXT DEFAULT NULL REFERENCES posts(id),
+    event_type TEXT NOT NULL,
+    content_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_post_events_user_created ON post_events(user_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_post_events_user_content ON post_events(user_id, content_hash, created_at);
 """
 
 SEED_ROOMS = [
@@ -542,17 +547,93 @@ def resolve_author(payload: PostCreate | ThreadCreate, user: dict[str, Any] | No
     }
 
 
-def insert_receipts(conn: sqlite3.Connection, receipts: Iterable[dict[str, Any]]) -> None:
-    for receipt in receipts:
-        conn.execute(
-            """INSERT OR REPLACE INTO receipts
-            (id, post_id, receipt_type, summary, details_json, boundary, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (
-                receipt["id"], receipt.get("post_id"), receipt["receipt_type"], receipt["summary"],
-                json.dumps(receipt.get("details", []), ensure_ascii=False), receipt["boundary"], receipt["created_at"],
-            ),
+def format_transient_receipt(receipt: dict[str, Any]) -> dict[str, Any]:
+    """Mark a generated receipt as non-retained before returning it.
+
+    Receipts are clarity views over existing forum records. They are generated
+    when requested and are not written into the database as user-derived
+    behavioral records, risk scores, or hidden profiles.
+    """
+    item = dict(receipt)
+    item["generated_on_request"] = True
+    item["stored"] = False
+    item["retention_boundary"] = ON_DEMAND_RECEIPT_BOUNDARY
+    return item
+
+
+def parse_iso_datetime(value: str) -> datetime:
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        return datetime.now(timezone.utc)
+
+
+def content_fingerprint(*parts: str) -> str:
+    normalized = " ".join(" ".join(str(part or "").lower().split()) for part in parts)
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def require_logged_in_user(conn: sqlite3.Connection, authorization: str | None) -> dict[str, Any]:
+    user = get_user_by_token(conn, parse_bearer(authorization))
+    if not user:
+        raise HTTPException(status_code=401, detail="Login required for posting so the forum is not anonymously spamable")
+    return user
+
+
+def enforce_posting_limit(conn: sqlite3.Connection, user_id: str, content_hash: str, now: str) -> dict[str, Any]:
+    now_dt = parse_iso_datetime(now)
+    window_start = (now_dt - timedelta(minutes=POST_WINDOW_MINUTES)).isoformat(timespec="seconds")
+    duplicate_start = (now_dt - timedelta(minutes=DUPLICATE_BLOCK_MINUTES)).isoformat(timespec="seconds")
+
+    recent_rows = conn.execute(
+        "SELECT created_at FROM post_events WHERE user_id = ? AND created_at >= ? ORDER BY created_at DESC",
+        (user_id, window_start),
+    ).fetchall()
+    if len(recent_rows) >= MAX_POSTS_PER_WINDOW:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Posting limit reached: {MAX_POSTS_PER_WINDOW} posts per {POST_WINDOW_MINUTES} minutes.",
         )
+
+    if recent_rows:
+        latest_dt = parse_iso_datetime(recent_rows[0]["created_at"])
+        cooldown_remaining = POST_COOLDOWN_SECONDS - int((now_dt - latest_dt).total_seconds())
+        if cooldown_remaining > 0:
+            raise HTTPException(status_code=429, detail=f"Cooldown active: wait {cooldown_remaining}s before posting again.")
+
+    duplicate = conn.execute(
+        "SELECT id FROM post_events WHERE user_id = ? AND content_hash = ? AND created_at >= ? LIMIT 1",
+        (user_id, content_hash, duplicate_start),
+    ).fetchone()
+    if duplicate:
+        raise HTTPException(status_code=429, detail="Duplicate post blocked. Change the content or wait before posting it again.")
+
+    return {
+        "max_posts_per_window": MAX_POSTS_PER_WINDOW,
+        "window_minutes": POST_WINDOW_MINUTES,
+        "cooldown_seconds": POST_COOLDOWN_SECONDS,
+        "duplicate_block_minutes": DUPLICATE_BLOCK_MINUTES,
+        "remaining_after_post": MAX_POSTS_PER_WINDOW - len(recent_rows) - 1,
+        "boundary": POSTING_LIMIT_BOUNDARY,
+    }
+
+
+def record_post_event(
+    conn: sqlite3.Connection,
+    *,
+    user_id: str,
+    thread_id: str,
+    post_id: str,
+    event_type: str,
+    content_hash: str,
+    now: str,
+) -> None:
+    event_id = f"post-event-{stable_hash(user_id, thread_id, post_id, event_type, now)}"
+    conn.execute(
+        """INSERT INTO post_events (id, user_id, thread_id, post_id, event_type, content_hash, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (event_id, user_id, thread_id, post_id, event_type, content_hash, now),
+    )
 
 
 def insert_post(
@@ -591,7 +672,6 @@ def insert_post(
         row,
     )
     conn.execute("UPDATE threads SET updated_at = ? WHERE id = ?", (now, thread_id))
-    insert_receipts(conn, create_receipts_for_post(post_id, row, now))
     return row
 
 
@@ -618,7 +698,7 @@ def make_app(db_path: Path | None = None) -> FastAPI:
 
     @app.get("/health")
     def health() -> dict[str, str]:
-        return {"status": "ok", "version": APP_VERSION, "boundary": BOUNDARY, "login_boundary": LOGIN_BOUNDARY}
+        return {"status": "ok", "version": APP_VERSION, "boundary": BOUNDARY, "login_boundary": LOGIN_BOUNDARY, "receipt_boundary": ON_DEMAND_RECEIPT_BOUNDARY, "posting_limit_boundary": POSTING_LIMIT_BOUNDARY}
 
     @app.get("/api/policy/eu-hard-boundaries")
     def get_eu_hard_boundary_policy() -> dict[str, Any]:
@@ -716,12 +796,14 @@ def make_app(db_path: Path | None = None) -> FastAPI:
     @app.post("/api/threads")
     def create_thread(payload: ThreadCreate, authorization: str | None = Header(default=None)) -> dict[str, Any]:
         with db_connection(path) as conn:
-            user = get_user_by_token(conn, parse_bearer(authorization))
+            user = require_logged_in_user(conn, authorization)
             room = conn.execute("SELECT id FROM rooms WHERE id = ?", (payload.room_id,)).fetchone()
             if not room:
                 raise HTTPException(status_code=404, detail="Room not found")
-            author = resolve_author(payload, user)
             now = utc_now()
+            content_hash = content_fingerprint(payload.title, payload.original_text)
+            limit = enforce_posting_limit(conn, user["id"], content_hash, now)
+            author = resolve_author(payload, user)
             thread_id = f"thread-{stable_hash(payload.room_id, payload.title, author['author_name'], now)}"
             conn.execute(
                 """INSERT INTO threads
@@ -733,28 +815,49 @@ def make_app(db_path: Path | None = None) -> FastAPI:
                 ),
             )
             post = PostCreate(
-                author_name=None if user else author["author_name"],
-                author_country=None if user else author["author_country"],
-                photo_url=None if user else author["photo_url"],
+                author_name=None,
+                author_country=None,
+                photo_url=None,
                 role=author["role"],
                 original_text=payload.original_text,
                 translated_text=payload.translated_text,
                 language_label=payload.language_label,
                 prompt_text=payload.prompt_text,
             )
-            insert_post(conn, thread_id, post, now=now, user=user if user else None)
+            inserted = insert_post(conn, thread_id, post, now=now, user=user)
+            record_post_event(
+                conn,
+                user_id=user["id"],
+                thread_id=thread_id,
+                post_id=inserted["id"],
+                event_type="thread",
+                content_hash=content_hash,
+                now=now,
+            )
             thread = fetch_thread(conn, thread_id)
-        return {"thread": thread, "boundary": BOUNDARY}
+        return {"thread": thread, "boundary": BOUNDARY, "posting_limit": limit}
 
     @app.post("/api/threads/{thread_id}/replies")
     def create_reply(thread_id: str, payload: PostCreate, authorization: str | None = Header(default=None)) -> dict[str, Any]:
         with db_connection(path) as conn:
-            user = get_user_by_token(conn, parse_bearer(authorization))
+            user = require_logged_in_user(conn, authorization)
             existing = conn.execute("SELECT id FROM threads WHERE id = ?", (thread_id,)).fetchone()
             if not existing:
                 raise HTTPException(status_code=404, detail="Thread not found")
-            post = insert_post(conn, thread_id, payload, user=user)
-        return {"post": post, "boundary": BOUNDARY}
+            now = utc_now()
+            content_hash = content_fingerprint(thread_id, payload.original_text)
+            limit = enforce_posting_limit(conn, user["id"], content_hash, now)
+            post = insert_post(conn, thread_id, payload, now=now, user=user)
+            record_post_event(
+                conn,
+                user_id=user["id"],
+                thread_id=thread_id,
+                post_id=post["id"],
+                event_type="reply",
+                content_hash=content_hash,
+                now=now,
+            )
+        return {"post": post, "boundary": BOUNDARY, "posting_limit": limit}
 
 
     @app.post("/api/posts/{post_id}/reports")
@@ -783,8 +886,7 @@ def make_app(db_path: Path | None = None) -> FastAPI:
                 report,
             )
             report_count = conn.execute("SELECT COUNT(*) AS count FROM reports WHERE post_id = ?", (post_id,)).fetchone()["count"]
-            receipt = create_report_receipt(post_id, report, report_count, now)
-            insert_receipts(conn, [receipt])
+            receipt = format_transient_receipt(create_report_receipt(post_id, report, report_count, now))
         return {"report": report, "report_count": report_count, "receipt": receipt, "boundary": HUMAN_REVIEW_BOUNDARY}
 
     @app.get("/api/review-queue")
@@ -835,8 +937,7 @@ def make_app(db_path: Path | None = None) -> FastAPI:
             if payload.action_type in {"temporary_hide", "keep_hidden", "restore"}:
                 status = "temporarily_hidden" if payload.action_type == "temporary_hide" else ("kept_hidden" if payload.action_type == "keep_hidden" else "visible")
                 conn.execute("UPDATE posts SET visibility_status = ?, updated_at = ? WHERE id = ?", (status, now, post_id))
-            receipt = create_review_action_receipt(post_id, action, now)
-            insert_receipts(conn, [receipt])
+            receipt = format_transient_receipt(create_review_action_receipt(post_id, action, now))
         return {"action": action, "receipt": receipt, "boundary": HUMAN_REVIEW_BOUNDARY}
 
 
@@ -864,8 +965,7 @@ def make_app(db_path: Path | None = None) -> FastAPI:
                 VALUES (:id, :post_id, :note_type, :reviewer_name, :reviewer_country, :source_label, :note, :created_at)""",
                 note,
             )
-            receipt = create_evidence_note_receipt(post_id, note, now)
-            insert_receipts(conn, [receipt])
+            receipt = format_transient_receipt(create_evidence_note_receipt(post_id, note, now))
         return {"evidence_note": note, "receipt": receipt, "boundary": EVIDENCE_REVIEW_BOUNDARY}
 
     @app.get("/api/posts/{post_id}/evidence-notes")
@@ -888,29 +988,44 @@ def make_app(db_path: Path | None = None) -> FastAPI:
 
     @app.get("/api/posts/{post_id}/receipts")
     def get_post_receipts(post_id: str) -> dict[str, Any]:
+        """Generate a clarity receipt bundle on demand without persistence."""
+        now = utc_now()
         with db_connection(path) as conn:
-            post = row_to_dict(conn.execute("SELECT id FROM posts WHERE id = ?", (post_id,)).fetchone())
+            post = row_to_dict(conn.execute("SELECT * FROM posts WHERE id = ?", (post_id,)).fetchone())
             if not post:
                 raise HTTPException(status_code=404, detail="Post not found")
-            rows = conn.execute("SELECT * FROM receipts WHERE post_id = ? ORDER BY created_at ASC", (post_id,)).fetchall()
-            receipts = []
-            for row in rows:
-                item = row_to_dict(row)
-                item["details"] = json.loads(item.pop("details_json") or "[]")
-                receipts.append(item)
-        return {"post_id": post_id, "receipts": receipts}
+
+            receipts = [format_transient_receipt(item) for item in create_receipts_for_post(post_id, post, now)]
+
+            report_rows = [row_to_dict(row) for row in conn.execute("SELECT * FROM reports WHERE post_id = ? ORDER BY created_at ASC", (post_id,)).fetchall()]
+            for index, report in enumerate(report_rows, start=1):
+                receipts.append(format_transient_receipt(create_report_receipt(post_id, report, index, now)))
+
+            review_rows = [row_to_dict(row) for row in conn.execute("SELECT * FROM review_actions WHERE post_id = ? ORDER BY created_at ASC", (post_id,)).fetchall()]
+            for action in review_rows:
+                receipts.append(format_transient_receipt(create_review_action_receipt(post_id, action, now)))
+
+            evidence_rows = [row_to_dict(row) for row in conn.execute("SELECT * FROM evidence_notes WHERE post_id = ? ORDER BY created_at ASC", (post_id,)).fetchall()]
+            for note in evidence_rows:
+                receipts.append(format_transient_receipt(create_evidence_note_receipt(post_id, note, now)))
+
+        return {
+            "post_id": post_id,
+            "receipts": receipts,
+            "generated_on_request": True,
+            "stored": False,
+            "boundary": ON_DEMAND_RECEIPT_BOUNDARY,
+        }
 
     @app.get("/api/receipts")
     def list_recent_receipts(limit: int = 30) -> dict[str, Any]:
-        limit = max(1, min(100, int(limit)))
-        with db_connection(path) as conn:
-            rows = conn.execute("SELECT * FROM receipts ORDER BY created_at DESC LIMIT ?", (limit,)).fetchall()
-            receipts = []
-            for row in rows:
-                item = row_to_dict(row)
-                item["details"] = json.loads(item.pop("details_json") or "[]")
-                receipts.append(item)
-        return {"receipts": receipts, "boundary": BOUNDARY}
+        return {
+            "receipts": [],
+            "generated_on_request": False,
+            "stored": False,
+            "boundary": ON_DEMAND_RECEIPT_BOUNDARY,
+            "note": "No persistent receipt ledger is kept. Request a post receipt endpoint to generate a temporary clarity view for that post.",
+        }
 
     return app
 

@@ -1,0 +1,19 @@
+Patch 24 - Media Feed Front Door + Compact Anti-Spam Posting
+
+Changed files:
+- app.js
+- styles.css
+- backend/eps_backend.py
+- docs/FUNCTIONAL_FORUM_ROADMAP.md
+- PATCH_STATUS.md
+
+Added files:
+- docs/PATCH_24_MEDIA_FEED_POSTING.md
+- tests/test_patch_24_media_feed_posting.py
+- PATCH_24_MANIFEST.txt
+- PATCH_24_RECOVERY_NOTE.md
+
+Validation:
+- node --check app.js
+- python -m py_compile backend/eps_backend.py
+- pytest -q tests/test_patch_24_media_feed_posting.py tests/test_patch_23_on_demand_receipts.py

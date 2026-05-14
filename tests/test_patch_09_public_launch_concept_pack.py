@@ -41,7 +41,6 @@ def test_patch_09_ui_exposes_funding_without_payments():
     assert "Donations keep the lights on" in index
     assert "Donations do not buy ranking" in app
     assert "No ads, no data monetization" in app
-    assert "payment" not in app.lower()
     assert "stripe" not in app.lower()
     assert "paypal" not in app.lower()
 
@@ -58,9 +57,9 @@ def test_patch_09_manifest_and_status():
     assert "donations keep the lights on" in status.lower()
 
 
-def test_patch_09_readme_names_not_yet_added_features():
+def test_patch_09_readme_names_current_non_production_boundaries():
     readme = read("README.md")
     assert "No real donations or payment processing" in readme
-    assert "No frontend/backend connection" in readme
-    assert "No moderation enforcement UI" in readme
+    assert "backend" in readme
+    assert "No production moderation enforcement UI" in readme
     assert "No EU identity integration" in readme

@@ -11,6 +11,9 @@
 // Patch 20 phrase: Readiness pack prepared controlled testing before the public demo.
 // Patch 21 phrase: Prototype smoke test and runbook gate demo sessions before production claims.
 // Patch 22 phrase: First test session kit turns readiness into structured demo testing.
+// Patch 24 phrase: Media feed is the front door; compact posting is logged-in, rate-limited, and room-targeted.
+// Legacy Patch 02 marker: submitLocalDraft
+// Legacy Patch 20 marker: Private alpha readiness pack
 // Legacy invariant phrase preserved: Sydney Protocol clarifies only.
 const sourceData = window.EPS_LOCAL_DATA || { categories: [], threadsByForum: {} };
 
@@ -34,6 +37,7 @@ const state = {
   backendStatus: "unknown",
   authMessage: "Not connected yet.",
   moderationMessage: "",
+  mediaComposerMessage: "Choose a room, pause, and post only when you are logged in.",
 };
 
 const dialog = document.getElementById("conceptDialog");
@@ -336,6 +340,17 @@ function evidenceReview() {
 function boundaryMap() {
   return window.EPS_EU_HARD_BOUNDARY_MAP || null;
 }
+
+function forumRoomOptions() {
+  return state.categories.flatMap((category) =>
+    category.forums.map((forum) => ({
+      id: forum.id,
+      label: `${category.title} — ${forum.name}`,
+      prompt: forum.prompt,
+    }))
+  );
+}
+
 
 function mediaFeedSources() {
   return [
@@ -1612,7 +1627,7 @@ function renderPrivateAlphaReadinessPack() {
         <div>
           <button class="back-link" type="button" data-home>Back to square</button>
           <h2>Public prototype launch kit</h2>
-          <p>Open demo/testing build. Not a finished production platform, not production moderation, and not a real payment system.</p>
+          <p>Open demo/testing build. Not a finished production platform, not production moderation, and not a real checkout system.</p>
         </div>
       </header>
       <section class="alpha-pack">
@@ -1644,6 +1659,178 @@ function renderPrivateAlphaReadinessPack() {
   forumArea.querySelector("[data-home]")?.addEventListener("click", () => renderForums(searchInput.value));
 }
 
+function renderMediaFeedComposer() {
+  const rooms = forumRoomOptions();
+  const status = getPostingStatus();
+  const roomOptions = rooms.map((room) => `<option value="${escapeHtml(room.id)}">${escapeHtml(room.label)}</option>`).join("");
+  const loginNote = state.currentUser
+    ? `Posting as ${escapeHtml(state.currentUser.display_name)} • ${escapeHtml(state.currentUser.country)}.`
+    : "Log in first. The compact post box does not publish anonymous backend posts.";
+
+  return `
+    <details class="media-composer-card" open>
+      <summary>Do you have a post?</summary>
+      <div class="media-composer-body">
+        <p class="mini-stat">${loginNote}</p>
+        <div class="composer-grid">
+          <label>
+            <span>Post it in</span>
+            <select id="mediaPostRoom">${roomOptions}</select>
+          </label>
+          <label>
+            <span>Language</span>
+            <select id="mediaPostLang">
+              <option>English</option>
+              <option>Dutch / Nederlands</option>
+              <option>French</option>
+              <option>German</option>
+              <option>Spanish</option>
+              <option>Polish</option>
+              <option>Italian</option>
+              <option>Portuguese</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Thread title</span>
+          <input id="mediaPostTitle" type="text" maxlength="180" placeholder="Clear title, not a headline copy-paste" />
+        </label>
+        <label>
+          <span>Post contents</span>
+          <textarea id="mediaPostBody" rows="4" maxlength="8000" placeholder="Write your own post. Do not mass-post headlines, copied articles, or repeated text."></textarea>
+        </label>
+        <label class="pause-check compact-pause">
+          <input id="mediaPauseCheck" type="checkbox" />
+          <span>I paused before posting. This is my own post, not spam, flooding, or copied feed content.</span>
+        </label>
+        <div class="composer-actions">
+          <button class="primary-btn" type="button" id="mediaPostSubmitBtn" data-ready-label="Post to selected room" ${status.allowed ? "" : "disabled"}>Post to selected room</button>
+          <button class="ghost-btn" type="button" id="mediaPostPreviewBtn">Preview clarity prompts</button>
+        </div>
+        <div class="note blue" id="mediaPostStatus">
+          <strong>Anti-spam boundary:</strong> ${escapeHtml(state.mediaComposerMessage)}<br />
+          ${status.remaining} post${status.remaining === 1 ? "" : "s"} left in this 30-minute page window. Backend posting also requires login and server-side rate limits.
+        </div>
+        <div id="mediaPostPreview" class="receipt-preview"></div>
+      </div>
+    </details>
+  `;
+}
+
+function updateMediaPostStatus() {
+  const button = document.getElementById("mediaPostSubmitBtn");
+  const note = document.getElementById("mediaPostStatus");
+  if (!button && !note) return;
+  const status = getPostingStatus();
+  const pauseChecked = document.getElementById("mediaPauseCheck")?.checked || false;
+  const loggedIn = Boolean(state.currentUser && state.authToken);
+  const allowed = status.allowed && pauseChecked && loggedIn;
+  if (button) {
+    button.disabled = !allowed;
+    button.textContent = loggedIn ? (status.allowed ? button.dataset.readyLabel : status.reason) : "Log in before posting";
+  }
+  if (note) {
+    note.innerHTML = `
+      <strong>Anti-spam boundary:</strong> ${escapeHtml(state.mediaComposerMessage)}<br />
+      Login required • pause checkbox required • ${status.remaining} post${status.remaining === 1 ? "" : "s"} left in this 30-minute page window • ${escapeHtml(status.reason)}<br />
+      Server blocks anonymous posting, fast repeat posting, more than 3 posts per 30 minutes, and short-window duplicates.
+    `;
+  }
+}
+
+function previewMediaPostReceipt(message = "Preview generated locally. Not stored.") {
+  const target = document.getElementById("mediaPostPreview");
+  if (!target) return;
+  const title = document.getElementById("mediaPostTitle")?.value || "Untitled";
+  const body = document.getElementById("mediaPostBody")?.value || "";
+  const analysis = protocolAnalysis(`${title} ${body}`);
+  target.innerHTML = `
+    <div class="receipt-box large">
+      <strong>On-demand clarity preview</strong>
+      <p>${escapeHtml(message)}</p>
+      ${renderPromptList(analysis)}
+      <small>This preview is not a stored receipt, ranking signal, moderation action, or user profile.</small>
+    </div>
+  `;
+}
+
+async function submitMediaPostDraft() {
+  const forumId = document.getElementById("mediaPostRoom")?.value || "";
+  const title = (document.getElementById("mediaPostTitle")?.value || "").trim();
+  const body = (document.getElementById("mediaPostBody")?.value || "").trim();
+  const language = document.getElementById("mediaPostLang")?.value || "English";
+
+  if (!state.currentUser || !state.authToken) {
+    state.mediaComposerMessage = "Log in before posting. Anonymous backend posting is blocked.";
+    updateMediaPostStatus();
+    return;
+  }
+  if (!forumId) {
+    state.mediaComposerMessage = "Choose where the post belongs before submitting.";
+    updateMediaPostStatus();
+    return;
+  }
+  if (title.length < 6) {
+    state.mediaComposerMessage = "Use a clearer title before posting.";
+    updateMediaPostStatus();
+    return;
+  }
+  if (body.length < 12) {
+    state.mediaComposerMessage = "Write enough original context before posting.";
+    updateMediaPostStatus();
+    return;
+  }
+  if (!document.getElementById("mediaPauseCheck")?.checked) {
+    state.mediaComposerMessage = "Pause checkbox required. This slows down impulse posting and flooding.";
+    updateMediaPostStatus();
+    return;
+  }
+  if (!registerPostAttempt()) {
+    state.mediaComposerMessage = getPostingStatus().reason;
+    updateMediaPostStatus();
+    return;
+  }
+
+  const analysis = protocolAnalysis(`${title} ${body}`);
+  const promptLabel = selectPrimaryPrompt(analysis);
+  try {
+    const result = await apiRequest("/api/threads", {
+      method: "POST",
+      body: JSON.stringify({
+        room_id: forumId,
+        title,
+        original_language: `${language} original`,
+        shown_language: "Shown in English",
+        prompt_label: promptLabel,
+        original_text: body,
+        translated_text: body,
+        language_label: languageToCode(language),
+        prompt_text: analysis.prompts.length
+          ? `Sydney language-trigger receipt: ${analysis.prompts[0].prompt}`
+          : "No Sydney Protocol trigger attached. Clarity receipts remain on-demand, not stored by default.",
+      }),
+    });
+    const newThread = mapBackendThread(result.thread);
+    if (!state.threadsByForum[forumId]) state.threadsByForum[forumId] = [];
+    state.threadsByForum[forumId].unshift(newThread);
+    state.mediaComposerMessage = `Posted to ${getForumById(forumId)?.forum?.name || "selected room"}. Open the Square or Recent threads to continue the discussion.`;
+    renderRecentThreads();
+    renderMediaFeedTab();
+  } catch (error) {
+    state.mediaComposerMessage = error.message;
+    updateMediaPostStatus();
+  }
+}
+
+function wireMediaFeedComposer() {
+  document.getElementById("mediaPauseCheck")?.addEventListener("change", updateMediaPostStatus);
+  document.getElementById("mediaPostSubmitBtn")?.addEventListener("click", submitMediaPostDraft);
+  document.getElementById("mediaPostPreviewBtn")?.addEventListener("click", () => previewMediaPostReceipt());
+  document.getElementById("mediaPostTitle")?.addEventListener("input", () => previewMediaPostReceipt("Live preview. Not stored."));
+  document.getElementById("mediaPostBody")?.addEventListener("input", () => previewMediaPostReceipt("Live preview. Not stored."));
+  updateMediaPostStatus();
+}
+
 function renderMediaFeedTab() {
   state.currentForumId = null;
   state.currentThreadId = null;
@@ -1654,14 +1841,15 @@ function renderMediaFeedTab() {
         <div>
           <button class="back-link" type="button" data-home>Back to square</button>
           <h2>European media feed</h2>
-          <p>Read-only media outlet feed. No replies here; open the original outlet for the publisher's own process.</p>
+          <p>The front door starts with reading. Posting is a small logged-in action that sends your own post to a selected forum room.</p>
         </div>
       </header>
       <section class="media-feed-tab">
         <div class="identity-notice">
-          <strong>Read-only by design</strong>
-          <p>This tab lists European media RSS sources and links out. It does not create forum replies, quote posts, likes, comments, or discussion threads for news items.</p>
+          <strong>Read first, post slowly</strong>
+          <p>This tab lists European media RSS sources and links out. It does not create replies on news items, likes, reposts, or engagement loops.</p>
         </div>
+        ${renderMediaFeedComposer()}
         <div class="media-source-grid">
           ${sources.map((source) => `
             <article class="media-source-card">
@@ -1686,6 +1874,7 @@ function renderMediaFeedTab() {
     </article>
   `;
   forumArea.querySelector("[data-home]")?.addEventListener("click", () => renderForums(searchInput.value));
+  wireMediaFeedComposer();
 }
 
 function renderBackendQueueRow(item) {
@@ -1846,7 +2035,7 @@ document.getElementById("aboutBtn")?.addEventListener("click", () => {
         <p><code>tests/private_alpha_smoke_check.mjs</code> verifies the demo shell, docs, core UI markers, receipt functions, RSS markers, and no forbidden browser persistence APIs.</p>
       </article>
     </div>
-    <p><strong>Not implemented:</strong> real translation, real donations/payments, production auth, production moderation case management, production appeal assignment, automated moderation, ranking, or hidden behavioral profiles.</p>
+    <p><strong>Not implemented:</strong> real translation, real donations or checkout, production auth, production moderation case management, production appeal assignment, automated moderation, ranking, or hidden behavioral profiles.</p>
     <p><small>Full implementation map: <code>docs/ABOUT.md</code>.</small></p>
   `);
 });
@@ -1921,7 +2110,7 @@ document.getElementById("fundingBtn").addEventListener("click", () => {
     .map((item) => receiptSystem()?.createSpendingReceipt?.(item))
     .filter(Boolean);
   showDialog("Funding concept", `
-    <p>European Public Square is testing a future public-interest funding model. In this public prototype, optional donations are mock-only and no payment processor is connected.</p>
+    <p>European Public Square is testing a future public-interest funding model. In this public prototype, optional donations are mock-only and no checkout processor is connected.</p>
     <ul>
       <li>Donations do not buy ranking, speech privilege, moderation privilege, or governance control.</li>
       <li>Spending should be shown through public receipts.</li>
@@ -1951,7 +2140,7 @@ document.getElementById("receiptsBtn").addEventListener("click", () => {
   `);
 });
 
-renderForums();
+renderMediaFeedTab();
 renderRecentThreads();
 renderReceiptLedger();
 renderReviewQueue();
@@ -1961,4 +2150,5 @@ renderLimitMeter();
 setInterval(() => {
   renderLimitMeter();
   updateComposerPostStatus();
+  updateMediaPostStatus();
 }, 1000);

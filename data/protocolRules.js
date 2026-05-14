@@ -1,3 +1,4 @@
+// Clarify only. No truth verdict. No enforcement.
 window.EPS_PROTOCOL = (() => {
   const RULES = [
     {

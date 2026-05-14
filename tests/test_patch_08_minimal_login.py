@@ -108,21 +108,18 @@ def test_authenticated_post_uses_account_identity(tmp_path):
     assert any("Linked to minimal account identity" in detail for detail in identity[0]["details"])
 
 
-def test_compatibility_direct_name_country_still_works(tmp_path):
+def test_direct_name_country_backend_posting_is_blocked_after_patch_24(tmp_path):
     _, client = load_backend(tmp_path)
     reply = client.post("/api/threads/appeal-ai/replies", json={
         "author_name": "Mira",
         "author_country": "Spain",
-        "original_text": "Prototype compatibility still works.",
-        "translated_text": "Prototype compatibility still works.",
+        "original_text": "Prototype compatibility no longer allows anonymous backend posting.",
+        "translated_text": "Prototype compatibility no longer allows anonymous backend posting.",
         "language_label": "EN",
-        "prompt_text": "Clarify: this path is temporary until frontend login is connected.",
+        "prompt_text": "Clarify: backend posting now requires login to reduce spam.",
     })
-    assert reply.status_code == 200
-    post = reply.json()["post"]
-    assert post["author_name"] == "Mira"
-    assert post["author_country"] == "Spain"
-    assert post["user_id"] is None
+    assert reply.status_code == 401
+    assert "Login required" in reply.json()["detail"]
 
 
 def test_patch_08_docs_exist():

@@ -283,3 +283,40 @@ Boundary:
 - no public registration;
 - no real donations or payment processing;
 - no automated moderation.
+
+## Patch 23 — On-Demand Receipt Privacy Boundary
+
+Status: built.
+
+Adds:
+- on-demand receipt generation for posts;
+- no persistent Sydney Protocol / clarity receipt ledger;
+- transient receipt responses marked `generated_on_request: true` and `stored: false`;
+- `/api/receipts` boundary response explaining that no persistent receipt ledger is kept;
+- functional forum roadmap correction for receipt privacy.
+
+Boundary:
+- store necessary forum records, not user-derived receipt profiles;
+- receipts are generated when pulled;
+- no ranking, behavioral scoring, automatic moderation, or hidden trust profile.
+
+
+## Patch 24 — Media Feed Front Door + Compact Anti-Spam Posting
+
+Status: built.
+
+Adds:
+- media feed as the initial screen;
+- compact “Do you have a post?” composer inside the media feed tab;
+- target-room selector, title, language, contents, and pause checkbox;
+- logged-in-only backend posting from the compact composer;
+- local clarity preview that is not stored;
+- server-side posting limits for logged-in posts;
+- anonymous backend posting block for thread and reply creation;
+- minimal `post_events` anti-spam records for rate-limit enforcement.
+
+Boundary:
+- media feed remains read-only;
+- compact posting creates normal forum threads, not feed replies or engagement loops;
+- anti-spam records are not ranking, ad profiles, trust scores, or Sydney Protocol receipts;
+- Sydney Protocol clarity remains on-demand and non-authoritative.

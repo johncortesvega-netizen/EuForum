@@ -57,7 +57,7 @@ def test_threads_and_receipts_seeded(tmp_path):
     assert "protocol_prompt" in receipt_types
 
 
-def test_create_thread_and_reply(tmp_path):
+def test_create_thread_requires_login_after_patch_24(tmp_path):
     _, client = load_backend(tmp_path)
     payload = {
         "room_id": "governance",
@@ -72,24 +72,25 @@ def test_create_thread_and_reply(tmp_path):
         "language_label": "NL → EN",
         "prompt_text": "Clarify: donors receive no ranking or moderation privilege.",
     }
-    created = client.post("/api/threads", json=payload)
+    anonymous = client.post("/api/threads", json=payload)
+    assert anonymous.status_code == 401
+
+    client.post("/api/auth/register", json={
+        "display_name": "Johnny",
+        "country": "Netherlands",
+        "password": "strong-password-123",
+    })
+    login = client.post("/api/auth/login", json={
+        "display_name": "Johnny",
+        "password": "strong-password-123",
+    })
+    token = login.json()["token"]
+    created = client.post("/api/threads", headers={"Authorization": f"Bearer {token}"}, json=payload)
     assert created.status_code == 200
     thread = created.json()["thread"]
     assert thread["author_country"] == "Netherlands"
     assert thread["posts"][0]["author_name"] == "Johnny"
-
-    reply_payload = {
-        "author_name": "Mira",
-        "author_country": "Spain",
-        "original_text": "A public monthly receipt page would help.",
-        "translated_text": "A public monthly receipt page would help.",
-        "language_label": "EN",
-        "prompt_text": "Clarify: spending receipts should show category and reason.",
-    }
-    reply = client.post(f"/api/threads/{thread['id']}/replies", json=reply_payload)
-    assert reply.status_code == 200
-    post_id = reply.json()["post"]["id"]
-    receipts = client.get(f"/api/posts/{post_id}/receipts")
+    receipts = client.get(f"/api/posts/{thread['posts'][0]['id']}/receipts")
     assert receipts.status_code == 200
     assert len(receipts.json()["receipts"]) >= 3
 
